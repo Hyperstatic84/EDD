@@ -5,17 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EthoDogData - Bilan de Comportement Interactif</title>
     
-    <!-- PWA Meta Tags -->
+    <!-- PWA & Mobile Meta Tags -->
     <meta name="theme-color" content="#3730a3">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
+    <meta name="apple-mobile-web-app-title" content="EthoDogData">
     
-    <link rel="manifest" href="manifest.json">
+    <!-- App Icon (SVG Data URI) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
+
+    <!-- Web App Manifest (Embedded via Data URI) -->
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIkV0aG9Eb2dEYXRhIiwKICAic2hvcnRfbmFtZSI6ICJFdGhvRG9nIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjA2MTciLAogICJ0aGVtZV9jb2xvciI6ICIjMzczMGEzIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTInIHJ4PScxMDAnIGZpbGw9JyMzNzMwYTMnLz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzMwMCcgeD0nNTAlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtd2VpZ2h0PSdib2xkJz5FR0Q8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
@@ -28,10 +35,7 @@
             transition: background 0.3s ease;
         }
 
-        body.print-mode {
-            background: #ffffff !important;
-            color: #000000 !important;
-        }
+        body.print-mode { background: #ffffff !important; color: #000000 !important; }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
@@ -40,8 +44,6 @@
             border-radius: 24px;
             border: 2px solid rgba(99, 102, 241, 0.3);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            position: relative;
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
         }
@@ -54,20 +56,14 @@
             backdrop-filter: none !important;
         }
 
-        .reference-square {
-            aspect-ratio: 1 / 1;
-        }
-
-        .force-square {
-            aspect-ratio: 1 / 1 !important;
-        }
+        .reference-square { aspect-ratio: 1 / 1; }
+        .force-square { aspect-ratio: 1 / 1 !important; }
 
         .chart-container {
             position: relative;
             margin: auto;
             width: 100%;
             height: 336px;
-            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -82,12 +78,9 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.5rem;
-            flex-shrink: 0;
         }
 
-        body.print-mode .section-title {
-            color: #000000 !important;
-        }
+        body.print-mode .section-title { color: #000000 !important; }
 
         .export-btn {
             background: rgba(255, 255, 255, 0.1);
@@ -104,43 +97,36 @@
         .main-export-btn {
             background: linear-gradient(135deg, #6366f1, #4f46e5);
             color: white;
-            padding: 12px 24px;
+            padding: 14px 24px;
             border-radius: 12px;
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.8rem;
             letter-spacing: 0.05em;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-            transition: all 0.2s ease;
         }
 
         .bw-export-btn {
             background: #f8fafc;
             color: #1e1b4b;
             border: 2px solid #1e1b4b;
-            padding: 12px 24px;
+            padding: 14px 24px;
             border-radius: 12px;
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.8rem;
             letter-spacing: 0.05em;
-            transition: all 0.2s ease;
         }
 
         select, .text-input {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 10px 14px;
+            padding: 12px 14px;
             border-radius: 12px;
             width: 100%;
             outline: none;
             font-size: 1rem;
-            transition: border 0.3s ease;
-        }
-
-        .text-input:focus {
-            border-color: #818cf8;
         }
 
         body.print-mode .text-input {
@@ -149,10 +135,7 @@
             color: #000000 !important;
         }
 
-        select option {
-            background: #1e1b4b;
-            color: white;
-        }
+        select option { background: #1e1b4b; color: white; }
 
         input[type=range] {
             width: 100%;
@@ -165,38 +148,26 @@
 
         input[type=range]::-webkit-slider-thumb {
             appearance: none;
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             background: #fff;
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid #6366f1;
+            border: 3px solid #6366f1;
         }
 
-        .label-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            flex-shrink: 0;
-        }
+        .label-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .control-group { display: flex; flex-direction: column; gap: 4px; }
 
         .control-label {
             font-size: 0.65rem;
             font-weight: 600;
             color: #a5b4fc;
             text-transform: uppercase;
-            white-space: nowrap;
         }
 
-        body.print-mode .control-label {
-            color: #444444 !important;
-        }
+        body.print-mode .control-label { color: #444444 !important; }
 
         .analysis-badge {
             padding: 4px 12px;
@@ -206,30 +177,34 @@
             text-transform: uppercase;
         }
 
-        .highlight-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
-        }
-
-        body.print-mode .highlight-box {
-            background: transparent !important;
-            border: 1px solid #000 !important;
-        }
-
-        .export-hidden {
-            display: none !important;
-        }
-
-        .print-text-dark {
-            color: #ffffff;
-        }
-        body.print-mode .print-text-dark {
-            color: #000000 !important;
+        .export-hidden { display: none !important; }
+        .print-text-dark { color: #ffffff; }
+        body.print-mode .print-text-dark { color: #000000 !important; }
+        
+        #install-bar {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #6366f1;
+            color: white;
+            padding: 16px;
+            border-radius: 16px;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: space-between;
         }
     </style>
 </head>
-<body class="p-4 pb-20">
+<body class="p-4 pb-24">
+
+    <!-- Bannière d'installation PWA -->
+    <div id="install-bar">
+        <span class="text-sm font-bold">Installer l'application ?</span>
+        <button id="install-button" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-bold text-xs uppercase">Installer</button>
+    </div>
 
     <header class="mb-8 text-center pt-6">
         <h1 class="text-3xl font-black print-text-dark tracking-tight">EthoDogData</h1>
@@ -321,33 +296,63 @@
             <div class="py-2">
                 <p class="text-[9px] font-bold text-indigo-400 print-text-dark uppercase tracking-widest">Synthèse des 3 piliers</p>
             </div>
-            <div class="flex justify-between items-center highlight-box p-3 mt-4 rounded-xl stats-area" id="coherenceBlock">
+            <div class="flex justify-between items-center bg-white/5 border border-white/5 p-3 mt-4 rounded-xl" id="coherenceBlock">
                 <span class="text-[10px] font-semibold print-text-dark uppercase">Cohérence</span>
-                <span id="coherenceBadge" class="analysis-badge bg-emerald-500 text-white shadow-lg">Optimale</span>
+                <span id="coherenceBadge" class="analysis-badge bg-emerald-500 text-white">Optimale</span>
             </div>
         </section>
 
         <div class="pt-6 flex flex-col gap-3">
             <button class="main-export-btn w-full" onclick="exportAll()">
-                Tout exporter
+                Tout exporter (4 fichiers)
             </button>
             <button class="bw-export-btn w-full flex items-center justify-center gap-2" onclick="exportFullSummaryBW()">
-                Rapport Complet
+                Rapport Complet (Vertical N&B)
             </button>
         </div>
 
         <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8 print-text-dark">
-            Thomas Le Blanc • EthoDogData • <span id="currentDate"></span>
+            EthoDogData • <span id="currentDate"></span>
         </footer>
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+        // --- SERVICE WORKER POUR PWA ---
+        const swCode = `
+            const CACHE_NAME = 'ethodog-v1';
+            self.addEventListener('install', (e) => {
+                e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
             });
+            self.addEventListener('fetch', (e) => {
+                e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+            });
+        `;
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        const swUrl = URL.createObjectURL(blob);
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(swUrl).catch(err => console.log(err));
         }
 
+        // --- GESTION INSTALLATION ANDROID ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-bar').style.display = 'flex';
+        });
+
+        document.getElementById('install-button').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('install-bar').style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // --- LOGIQUE APPLICATION ---
         const raceProfiles = {
             custom: [5, 5, 5, 5, 5, 5], beagle: [8, 8, 2, 4, 7, 9], gsd: [6, 7, 9, 8, 8, 7], australian: [8, 5, 4, 8, 9, 9],
             border: [9, 4, 3, 9, 10, 8], ckc: [2, 4, 1, 6, 4, 9], dogo: [8, 3, 9, 5, 8, 4], golden: [4, 3, 4, 9, 6, 10],
@@ -365,9 +370,7 @@
             layout: { padding: 10 },
             scales: {
                 r: {
-                    min: 0, 
-                    max: 10,
-                    center: true,
+                    min: 0, max: 10, center: true,
                     ticks: { display: false, stepSize: 2 },
                     grid: { color: isPrintMode ? gridLight : gridDark },
                     angleLines: { color: isPrintMode ? gridLight : gridDark },
@@ -378,10 +381,7 @@
                     }
                 }
             },
-            plugins: { 
-                legend: { display: false },
-                tooltip: { enabled: !isPrintMode }
-            }
+            plugins: { legend: { display: false }, tooltip: { enabled: !isPrintMode } }
         });
 
         const getColors = (color) => {
@@ -395,19 +395,13 @@
 
         const charts = {
             etho: new Chart(document.getElementById('ethoChart').getContext('2d'), {
-                type: 'radar',
-                data: { labels: ethoData.labels, datasets: [{ data: ethoData.values }] },
-                options: getRadarOptions()
+                type: 'radar', data: { labels: ethoData.labels, datasets: [{ data: ethoData.values }] }, options: getRadarOptions()
             }),
             race: new Chart(document.getElementById('raceChart').getContext('2d'), {
-                type: 'radar',
-                data: { labels: raceData.labels, datasets: [{ data: raceData.individu }] },
-                options: getRadarOptions()
+                type: 'radar', data: { labels: raceData.labels, datasets: [{ data: raceData.individu }] }, options: getRadarOptions()
             }),
             budget: new Chart(document.getElementById('budgetChart').getContext('2d'), {
-                type: 'radar',
-                data: { labels: budgetData.labels, datasets: [{ data: budgetData.values }] },
-                options: getRadarOptions()
+                type: 'radar', data: { labels: budgetData.labels, datasets: [{ data: budgetData.values }] }, options: getRadarOptions()
             }),
             correlation: new Chart(document.getElementById('correlationSpider').getContext('2d'), {
                 type: 'radar',
@@ -423,26 +417,17 @@
         };
 
         function updateStyles() {
-            const colors = {
-                etho: getColors('rgba(59, 130, 246, 1)'),
-                race: getColors('rgba(249, 115, 22, 1)'),
-                budget: getColors('rgba(16, 185, 129, 1)'),
-                correlation: getColors('rgba(167, 139, 250, 1)')
-            };
-
+            const colors = { etho: 'rgba(59, 130, 246, 1)', race: 'rgba(249, 115, 22, 1)', budget: 'rgba(16, 185, 129, 1)', correlation: 'rgba(167, 139, 250, 1)' };
             Object.keys(charts).forEach(key => {
                 const c = charts[key];
-                const col = colors[key];
+                const col = getColors(colors[key]);
                 c.options = getRadarOptions();
                 c.data.datasets[0].backgroundColor = col.bg;
                 c.data.datasets[0].borderColor = col.border;
                 c.data.datasets[0].borderWidth = isPrintMode ? 2 : 3;
                 c.data.datasets[0].pointBackgroundColor = col.point;
                 c.data.datasets[0].pointBorderColor = col.border;
-                
-                if (key === 'correlation') {
-                    c.data.datasets[1].borderColor = isPrintMode ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)';
-                }
+                if (key === 'correlation') c.data.datasets[1].borderColor = isPrintMode ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)';
                 c.update('none');
             });
         }
@@ -470,28 +455,21 @@
             const card = document.getElementById(cardId);
             const dogName = document.getElementById('dogName').value.trim() || 'Inconnu';
             const baseName = card.getAttribute('data-filename') || 'Export';
-            const btn = card.querySelector('.export-btn');
-            const controls = card.querySelectorAll('.controls-area');
-            const selectors = card.querySelectorAll('select');
+            const toHide = card.querySelectorAll('.export-btn, .controls-area, select');
             
             card.classList.add('force-square');
-            btn.classList.add('export-hidden');
-            controls.forEach(c => c.classList.add('export-hidden'));
-            selectors.forEach(s => s.classList.add('export-hidden'));
+            toHide.forEach(el => el.classList.add('export-hidden'));
 
             try {
                 const canvas = await html2canvas(card, { backgroundColor: isPrintMode ? '#ffffff' : '#1e1b4b', scale: 2 });
                 const link = document.createElement('a');
-                const today = new Date();
-                const dateStr = today.toLocaleDateString('fr-FR').replace(/\//g, '-');
+                const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
                 link.download = `EthoDog_${dogName}_${baseName}_${dateStr}.png`;
                 link.href = canvas.toDataURL("image/png");
                 link.click();
             } finally {
                 card.classList.remove('force-square');
-                btn.classList.remove('export-hidden');
-                controls.forEach(c => c.classList.remove('export-hidden'));
-                selectors.forEach(s => s.classList.remove('export-hidden'));
+                toHide.forEach(el => el.classList.remove('export-hidden'));
             }
         }
 
@@ -502,71 +480,43 @@
             updateStyles();
 
             const ids = ['card-etho', 'card-race', 'card-budget', 'card-correlation'];
-            const canvases = [];
-            
-            document.querySelectorAll('.export-btn, .controls-area, .main-export-btn, .bw-export-btn').forEach(el => el.classList.add('export-hidden'));
-            const coherenceBlock = document.getElementById('coherenceBlock');
-            coherenceBlock.classList.add('export-hidden');
+            const toHide = document.querySelectorAll('.export-btn, .controls-area, .main-export-btn, .bw-export-btn, #coherenceBlock');
+            toHide.forEach(el => el.classList.add('export-hidden'));
 
             try {
+                const canvases = [];
                 for (const id of ids) {
                     const el = document.getElementById(id);
-                    const c = await html2canvas(el, { backgroundColor: '#ffffff', scale: 2 });
-                    canvases.push(c);
+                    canvases.push(await html2canvas(el, { backgroundColor: '#ffffff', scale: 2 }));
                 }
 
-                const finalCanvas = document.createElement('canvas');
-                const ctx = finalCanvas.getContext('2d');
-                const padding = 60;
-                const width = canvases[0].width + (padding * 2);
-                
-                let totalHeight = 400; 
-                canvases.forEach(c => totalHeight += c.height + padding);
-                totalHeight += 100;
+                const final = document.createElement('canvas');
+                const ctx = final.getContext('2d');
+                const pad = 60;
+                let h = 450; canvases.forEach(c => h += c.height + pad);
+                final.width = canvases[0].width + (pad * 2);
+                final.height = h + 100;
 
-                finalCanvas.width = width;
-                finalCanvas.height = totalHeight;
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,final.width,final.height);
+                ctx.fillStyle = '#000000'; ctx.textAlign = 'center';
+                ctx.font = '50px Inter'; ctx.fillText('Bilan de comportement de :', final.width/2, 140);
+                ctx.font = 'bold 85px Inter'; ctx.fillText(dogName, final.width/2, 240);
+                const dateStr = new Date().toLocaleDateString('fr-FR');
+                ctx.font = '40px Inter'; ctx.fillStyle = '#444444'; ctx.fillText('Fait le ' + dateStr, final.width/2, 330);
 
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-
-                ctx.fillStyle = '#000000';
-                ctx.textAlign = 'center';
-                
-                // En-tête épuré
-                ctx.font = '50px Inter, sans-serif';
-                ctx.fillText('Bilan de comportement de :', finalCanvas.width / 2, 140);
-                
-                ctx.font = 'bold 85px Inter, sans-serif';
-                ctx.fillText(dogName, finalCanvas.width / 2, 230);
-
-                ctx.font = '40px Inter, sans-serif';
-                ctx.fillStyle = '#444444';
-                const today = new Date();
-                const dateStr = today.toLocaleDateString('fr-FR');
-                ctx.fillText('Fait le ' + dateStr, finalCanvas.width / 2, 310);
-
-                let currentY = 400;
-                canvases.forEach((c) => {
-                    ctx.drawImage(c, padding, currentY);
-                    currentY += c.height + padding;
-                });
-
-                ctx.font = 'italic 30px Inter, sans-serif';
-                ctx.fillStyle = '#666666';
-                ctx.fillText('© EthoDogData - Analyse Canine', finalCanvas.width / 2, finalCanvas.height - 50);
+                let y = 450;
+                canvases.forEach(c => { ctx.drawImage(c, pad, y); y += c.height + pad; });
+                ctx.font = 'italic 30px Inter'; ctx.fillStyle = '#666666'; ctx.fillText('© EthoDogData - Analyse Canine', final.width/2, final.height - 50);
 
                 const link = document.createElement('a');
-                const dateFilename = dateStr.replace(/\//g, '-');
-                link.download = `EthoDog_Rapport_${dogName}_${dateFilename}.png`;
-                link.href = finalCanvas.toDataURL("image/png");
+                link.download = `EthoDog_Rapport_${dogName}_${dateStr.replace(/\//g, '-')}.png`;
+                link.href = final.toDataURL("image/png");
                 link.click();
             } finally {
                 isPrintMode = false;
                 document.body.classList.remove('print-mode');
                 updateStyles();
-                document.querySelectorAll('.export-hidden').forEach(el => el.classList.remove('export-hidden'));
-                coherenceBlock.classList.remove('export-hidden');
+                toHide.forEach(el => el.classList.remove('export-hidden'));
             }
         }
 
@@ -581,16 +531,14 @@
             labels.forEach((label, index) => {
                 const group = document.createElement('div');
                 group.className = 'control-group';
-                group.innerHTML = `<label class="control-label">${label}</label>
-                                   <input type="range" min="0" max="10" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
-                const slider = group.querySelector('input');
-                slider.oninput = function() {
-                    const val = parseInt(this.value);
-                    chartInstance.data.datasets[datasetIndex].data[index] = val;
-                    if (containerId === 'raceControls') raceData.individu[index] = val;
-                    if (containerId === 'budgetControls') budgetData.values[index] = val;
-                    chartInstance.update('none');
-                    updateCorrelation();
+                group.innerHTML = `<label class="control-label">${label}</label><input type="range" min="0" max="10" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
+                const s = group.querySelector('input');
+                s.oninput = function() {
+                    const v = parseInt(this.value);
+                    chartInstance.data.datasets[datasetIndex].data[index] = v;
+                    if (containerId === 'raceControls') raceData.individu[index] = v;
+                    if (containerId === 'budgetControls') budgetData.values[index] = v;
+                    chartInstance.update('none'); updateCorrelation();
                 };
                 container.appendChild(group);
             });
@@ -601,17 +549,13 @@
             raceData.individu = [...vals];
             charts.race.data.datasets[0].data = [...vals];
             charts.race.update();
-            vals.forEach((v, i) => {
-                const s = document.getElementById(`raceControls-s-${i}`);
-                if(s) s.value = v;
-            });
+            vals.forEach((v, i) => { const s = document.getElementById(`raceControls-s-${i}`); if(s) s.value = v; });
             updateCorrelation();
         };
 
         createSliders('raceControls', raceData.labels, raceData.individu, charts.race);
         createSliders('budgetControls', budgetData.labels, budgetData.values, charts.budget);
-        updateStyles();
-        updateCorrelation();
+        updateStyles(); updateCorrelation();
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     </script>
 </body>
