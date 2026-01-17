@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EthoDogData - Bilan de Comportement Interactif</title>
     
     <!-- PWA & Mobile Meta Tags -->
@@ -16,8 +16,8 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
 
-    <!-- Web App Manifest (Embedded via Data URI) -->
-    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIkV0aG9Eb2dEYXRhIiwKICAic2hvcnRfbmFtZSI6ICJFdGhvRG9nIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjA2MTciLAogICJ0aGVtZV9jb2xvciI6ICIjMzczMGEzIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTInIHJ4PScxMDAnIGZpbGw9JyMzNzMwYTMnLz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzMwMCcgeD0nNTAlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtd2VpZ2h0PSdib2xkJz5FR0Q8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJpZCI6ICJjb20uZXRob2RvZ2RhdGEuYXBwIiwKICAibmFtZSI6ICJFdGhvRG9nRGF0YSIsCiAgInNob3J0X25hbWUiOiAiRXRob0RvZyIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDIwNjE3IiwKICAidGhlbWVfY29sb3ciOiAiIzM3MzBhMyIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInPjxyZWN0IHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyByeD0nMTAnIGZpbGw9JyMzNzMwYTMnLz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzMwMCcgeD0nNTAlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtd2VpZ2h0PSdib2xkJz5FR0Q8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,6 +33,8 @@
             min-height: 100vh;
             color: #f8fafc;
             transition: background 0.3s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body.print-mode { background: #ffffff !important; color: #000000 !important; }
@@ -139,21 +141,23 @@
 
         input[type=range] {
             width: 100%;
-            height: 4px;
+            height: 12px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            border-radius: 20px;
             appearance: none;
             outline: none;
+            margin: 10px 0;
         }
 
         input[type=range]::-webkit-slider-thumb {
             appearance: none;
-            width: 18px;
-            height: 18px;
+            width: 28px;
+            height: 28px;
             background: #fff;
             border-radius: 50%;
             cursor: pointer;
-            border: 3px solid #6366f1;
+            border: 4px solid #6366f1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .label-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -184,17 +188,18 @@
         #install-bar {
             display: none;
             position: fixed;
-            bottom: 20px;
+            top: 20px;
             left: 20px;
             right: 20px;
-            background: #6366f1;
+            background: #4f46e5;
             color: white;
             padding: 16px;
-            border-radius: 16px;
-            z-index: 1000;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            z-index: 9999;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             align-items: center;
             justify-content: space-between;
+            border: 2px solid rgba(255,255,255,0.2);
         }
     </style>
 </head>
@@ -202,8 +207,11 @@
 
     <!-- Bannière d'installation PWA -->
     <div id="install-bar">
-        <span class="text-sm font-bold">Installer l'application ?</span>
-        <button id="install-button" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-bold text-xs uppercase">Installer</button>
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold text-indigo-700">EDD</div>
+            <span class="text-sm font-bold">Installer l'application ?</span>
+        </div>
+        <button id="install-button" class="bg-white text-indigo-600 px-4 py-2 rounded-xl font-bold text-xs uppercase shadow-lg">Installer</button>
     </div>
 
     <header class="mb-8 text-center pt-6">
@@ -221,7 +229,7 @@
             </div>
         </div>
 
-        <!-- Section 1 -->
+        <!-- Sections Radar -->
         <section class="glass-card p-6 reference-square" id="card-etho" data-filename="Ethogramme_Canin">
             <div class="section-title">
                 <span>Éthogramme Canin</span>
@@ -235,7 +243,6 @@
             </div>
         </section>
 
-        <!-- Section 2 -->
         <section class="glass-card p-6" id="card-race" data-filename="Tendances_de_Race">
             <div class="section-title">
                 <span>Tendances de Race</span>
@@ -269,7 +276,6 @@
             <div class="mt-2 label-grid controls-area" id="raceControls"></div>
         </section>
 
-        <!-- Section 3 -->
         <section class="glass-card p-6" id="card-budget" data-filename="Budget_Temps">
             <div class="section-title">
                 <span>Budget Temps</span>
@@ -284,7 +290,6 @@
             <div class="mt-2 label-grid controls-area" id="budgetControls"></div>
         </section>
 
-        <!-- Section 4 -->
         <section class="glass-card p-6" id="card-correlation" data-filename="Correlation_Globale">
             <div class="section-title">
                 <span>Corrélation Globale</span>
@@ -317,20 +322,29 @@
     </div>
 
     <script>
-        // --- SERVICE WORKER POUR PWA ---
-        const swCode = `
-            const CACHE_NAME = 'ethodog-v1';
-            self.addEventListener('install', (e) => {
-                e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
-            });
-            self.addEventListener('fetch', (e) => {
-                e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-            });
-        `;
-        const blob = new Blob([swCode], {type: 'application/javascript'});
-        const swUrl = URL.createObjectURL(blob);
+        // --- LOGIQUE SERVICE WORKER (AVEC GESTION D'ERREUR PROTOCOLE) ---
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(swUrl).catch(err => console.log(err));
+            try {
+                const swCode = `
+                    const CACHE_NAME = 'ethodog-v3';
+                    self.addEventListener('install', (e) => {
+                        self.skipWaiting();
+                        e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
+                    });
+                    self.addEventListener('fetch', (e) => {
+                        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+                    });
+                `;
+                const blob = new Blob([swCode], {type: 'application/javascript'});
+                const swUrl = URL.createObjectURL(blob);
+                
+                // On tente l'enregistrement mais on ne bloque pas l'app si ça échoue (cas des environnements sandboxés)
+                navigator.serviceWorker.register(swUrl).catch(err => {
+                    console.warn("ServiceWorker non supporté dans cet environnement (URL protocol). L'app fonctionnera sans mode hors-ligne.");
+                });
+            } catch (e) {
+                console.warn("Erreur d'initialisation du ServiceWorker.");
+            }
         }
 
         // --- GESTION INSTALLATION ANDROID ---
@@ -352,7 +366,7 @@
             }
         });
 
-        // --- LOGIQUE APPLICATION ---
+        // --- LOGIQUE DES GRAPHIQUES ---
         const raceProfiles = {
             custom: [5, 5, 5, 5, 5, 5], beagle: [8, 8, 2, 4, 7, 9], gsd: [6, 7, 9, 8, 8, 7], australian: [8, 5, 4, 8, 9, 9],
             border: [9, 4, 3, 9, 10, 8], ckc: [2, 4, 1, 6, 4, 9], dogo: [8, 3, 9, 5, 8, 4], golden: [4, 3, 4, 9, 6, 10],
