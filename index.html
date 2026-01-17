@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EthoDogData - Bilan de Comportement Interactif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, #312e81, #1e1b4b, #020617);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reference-square {
+            aspect-ratio: 1 / 1;
+        }
+
+        .force-square {
+            aspect-ratio: 1 / 1 !important;
+        }
+
+        .chart-container {
+            position: relative;
+            margin: auto;
+            width: 100%;
+            height: 336px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .export-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a5b4fc;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .main-export-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .main-export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .main-export-btn:active {
+            transform: translateY(0);
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 10px;
+            width: 100%;
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        select option {
+            background: #1e1b4b;
+            color: white;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            appearance: none;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #6366f1;
+        }
+
+        .label-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #a5b4fc;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .analysis-badge {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .export-hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="p-4 pb-20">
+
+    <header class="mb-8 text-center pt-6">
+        <h1 class="text-3xl font-black text-white tracking-tight">EthoDogData</h1>
+        <div class="h-1 w-16 bg-indigo-500 mx-auto mt-2 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)]"></div>
+    </header>
+
+    <div class="max-w-md mx-auto space-y-6">
+        
+        <!-- Section 1 -->
+        <section class="glass-card p-6 reference-square" id="card-etho" data-filename="Ethogramme_Canin">
+            <div class="section-title">
+                <span>Éthogramme Canin</span>
+                <button class="export-btn" onclick="exportPNG('card-etho')">PNG</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="ethoChart"></canvas>
+            </div>
+            <div class="mt-auto pt-2">
+                <p class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">Référence fixe de l'espèce</p>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="glass-card p-6" id="card-race" data-filename="Tendances_de_Race">
+            <div class="section-title">
+                <span>Tendances de Race</span>
+                <button class="export-btn" onclick="exportPNG('card-race')">PNG</button>
+            </div>
+            <div class="mb-4 controls-area">
+                <select id="raceSelector">
+                    <option value="custom">Individu / Croisé</option>
+                    <option value="beagle">Beagle</option>
+                    <option value="gsd">Berger Allemand</option>
+                    <option value="australian">Berger Australien</option>
+                    <option value="border">Border Collie</option>
+                    <option value="ckc">Cavalier King Charles</option>
+                    <option value="dogo">Dogue Argentin</option>
+                    <option value="golden">Golden Retriever</option>
+                    <option value="husky">Husky</option>
+                    <option value="jack">Jack Russell</option>
+                    <option value="labrador">Labrador</option>
+                    <option value="clt">Loup Tchèque</option>
+                    <option value="malinois">Malinois</option>
+                    <option value="shiba">Shiba Inu</option>
+                    <option value="staff">Staff</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="raceChart"></canvas>
+            </div>
+            <div class="py-2">
+                <p class="text-[9px] font-bold text-orange-300 uppercase tracking-widest">Profil spécifique de l'individu</p>
+            </div>
+            <div class="mt-2 label-grid controls-area" id="raceControls"></div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="glass-card p-6" id="card-budget" data-filename="Budget_Temps">
+            <div class="section-title">
+                <span>Budget Temps</span>
+                <button class="export-btn" onclick="exportPNG('card-budget')">PNG</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="budgetChart"></canvas>
+            </div>
+            <div class="py-2">
+                <p class="text-[9px] font-bold text-emerald-300 uppercase tracking-widest">Répartition journalière réelle</p>
+            </div>
+            <div class="mt-2 label-grid controls-area" id="budgetControls"></div>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="glass-card p-6" id="card-correlation" data-filename="Correlation_Globale">
+            <div class="section-title">
+                <span>Corrélation Globale</span>
+                <button class="export-btn" onclick="exportPNG('card-correlation')">PNG</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="correlationSpider"></canvas>
+            </div>
+            <div class="py-2">
+                <p class="text-[9px] font-bold text-indigo-300 uppercase tracking-widest">Synthèse des 3 piliers</p>
+            </div>
+            <div class="flex justify-between items-center highlight-box p-3 mt-4 rounded-xl stats-area">
+                <span class="text-[10px] font-semibold text-indigo-100 uppercase">Cohérence</span>
+                <span id="coherenceBadge" class="analysis-badge bg-emerald-500 text-white shadow-lg">Optimale</span>
+            </div>
+        </section>
+
+        <!-- Nouveau Bouton Global -->
+        <div class="pt-6 flex justify-center">
+            <button class="main-export-btn w-full" onclick="exportAll()">
+                Tout exporter (4 PNG)
+            </button>
+        </div>
+
+        <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8">
+           © Thomas Le Blanc • EthoDogData • <span id="currentDate"></span>
+        </footer>
+    </div>
+
+    <script>
+        const raceProfiles = {
+            custom: [5, 5, 5, 5, 5, 5], beagle: [8, 8, 2, 4, 7, 9], gsd: [6, 7, 9, 8, 8, 7], australian: [8, 5, 4, 8, 9, 9],
+            border: [9, 4, 3, 9, 10, 8], ckc: [2, 4, 1, 6, 4, 9], dogo: [8, 3, 9, 5, 8, 4], golden: [4, 3, 4, 9, 6, 10],
+            husky: [9, 9, 2, 4, 10, 6], jack: [10, 7, 4, 6, 9, 5], labrador: [6, 5, 3, 8, 7, 10], clt: [7, 6, 9, 3, 9, 4],
+            malinois: [9, 8, 8, 9, 10, 7], shiba: [6, 6, 4, 3, 7, 2], staff: [7, 4, 6, 5, 9, 7]
+        };
+
+        const gridOpacity = 'rgba(255, 255, 255, 0.15)';
+
+        const getRadarOptions = (labelColor = '#ffffff') => ({
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: 10 },
+            scales: {
+                r: {
+                    min: 0, 
+                    max: 10,
+                    center: true,
+                    ticks: { display: false, stepSize: 2 },
+                    grid: { color: gridOpacity },
+                    angleLines: { color: gridOpacity },
+                    pointLabels: { 
+                        font: { size: 10, weight: '600' }, 
+                        color: labelColor,
+                        padding: 8 
+                    }
+                }
+            },
+            plugins: { 
+                legend: { display: false },
+                tooltip: { enabled: true }
+            }
+        });
+
+        const commonStyle = (color) => ({
+            backgroundColor: color.replace('1)', '0.35)'),
+            borderColor: color,
+            borderWidth: 3,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: color,
+            pointBorderWidth: 1,
+            pointRadius: 4,
+            pointHoverRadius: 6
+        });
+
+        const ethoData = { labels: ['Alimentation', 'Exploration', 'Social', 'Sécurité', 'Hygiène', 'Activité'], values: [7, 9, 8, 6, 5, 8] };
+        const raceData = { labels: ['Prédation', 'Aboiement', 'Garde', 'Docilité', 'Endurance', 'Grégaire'], individu: [5, 5, 5, 5, 5, 5] };
+        const budgetData = { labels: ['Sommeil', 'Mastication', 'Jeu', 'Balade', 'Contact', 'Solo'], values: [8, 4, 5, 6, 5, 5] };
+
+        const charts = {
+            etho: new Chart(document.getElementById('ethoChart').getContext('2d'), {
+                type: 'radar',
+                data: { labels: ethoData.labels, datasets: [{ data: ethoData.values, ...commonStyle('rgba(59, 130, 246, 1)') }] },
+                options: getRadarOptions()
+            }),
+            race: new Chart(document.getElementById('raceChart').getContext('2d'), {
+                type: 'radar',
+                data: { labels: raceData.labels, datasets: [{ data: raceData.individu, ...commonStyle('rgba(249, 115, 22, 1)') }] },
+                options: getRadarOptions()
+            }),
+            budget: new Chart(document.getElementById('budgetChart').getContext('2d'), {
+                type: 'radar',
+                data: { labels: budgetData.labels, datasets: [{ data: budgetData.values, ...commonStyle('rgba(16, 185, 129, 1)') }] },
+                options: getRadarOptions()
+            }),
+            correlation: new Chart(document.getElementById('correlationSpider').getContext('2d'), {
+                type: 'radar',
+                data: {
+                    labels: ['Espèce', 'Race', 'Quotidien', 'Éveil', 'Apaisement', 'Sécurité'],
+                    datasets: [
+                        { label: 'Individu', data: [0,0,0,0,0,0], ...commonStyle('rgba(167, 139, 250, 1)') },
+                        { label: 'Idéal', data: [8,5,8,6,7,8], borderColor: 'rgba(255, 255, 255, 0.4)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, fill: false }
+                    ]
+                },
+                options: getRadarOptions('#ffffff')
+            })
+        };
+
+        function updateCorrelation() {
+            const ind = raceData.individu;
+            const bud = budgetData.values;
+            const ethoScore = 8;
+            const raceScoreInd = (ind.reduce((a,b) => a+b, 0)) / 6;
+            const dailyScoreInd = (bud.reduce((a,b) => a+b, 0)) / 6;
+            const arousalScoreInd = (ind[0] + ind[4] + bud[2] + bud[3]) / 4; 
+            const calmingScoreInd = (bud[0] + bud[1]) / 2;
+            const securityScoreInd = ethoData.values[3];
+
+            charts.correlation.data.datasets[0].data = [ethoScore, raceScoreInd, dailyScoreInd, arousalScoreInd, calmingScoreInd, securityScoreInd];
+            charts.correlation.update('none');
+
+            const badge = document.getElementById('coherenceBadge');
+            const isUnstable = (bud[0] < 5) || (raceScoreInd > dailyScoreInd + 3);
+            badge.innerText = isUnstable ? "Fragile" : "Optimale";
+            badge.style.backgroundColor = isUnstable ? "#f59e0b" : "#10b981";
+        }
+
+        function createSliders(containerId, labels, initialValues, chartInstance, datasetIndex = 0) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; 
+            labels.forEach((label, index) => {
+                const group = document.createElement('div');
+                group.className = 'control-group';
+                group.innerHTML = `<label class="control-label">${label}</label>
+                                   <input type="range" min="0" max="10" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
+                const slider = group.querySelector('input');
+                slider.oninput = function() {
+                    const val = parseInt(this.value);
+                    chartInstance.data.datasets[datasetIndex].data[index] = val;
+                    if (containerId === 'raceControls') raceData.individu[index] = val;
+                    if (containerId === 'budgetControls') budgetData.values[index] = val;
+                    chartInstance.update('none');
+                    updateCorrelation();
+                };
+                container.appendChild(group);
+            });
+        }
+
+        async function exportPNG(cardId) {
+            const card = document.getElementById(cardId);
+            const baseName = card.getAttribute('data-filename') || 'Export';
+            
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const dateStr = `${day}-${month}-${year}`;
+
+            const btn = card.querySelector('.export-btn');
+            const controlsArea = card.querySelectorAll('.controls-area');
+            const selectors = card.querySelectorAll('select');
+            const statsArea = card.querySelectorAll('.stats-area');
+            
+            card.classList.add('force-square');
+            btn.classList.add('export-hidden');
+            controlsArea.forEach(c => c.classList.add('export-hidden'));
+            selectors.forEach(s => s.classList.add('export-hidden'));
+            statsArea.forEach(st => st.classList.add('export-hidden'));
+
+            Object.values(charts).forEach(c => c.resize());
+
+            try {
+                const canvas = await html2canvas(card, {
+                    backgroundColor: '#1e1b4b',
+                    scale: 3, 
+                    useCORS: true,
+                    logging: false
+                });
+                const link = document.createElement('a');
+                link.download = `EthoDog_${baseName}_${dateStr}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            } finally {
+                card.classList.remove('force-square');
+                btn.classList.remove('export-hidden');
+                controlsArea.forEach(c => c.classList.remove('export-hidden'));
+                selectors.forEach(s => s.classList.remove('export-hidden'));
+                statsArea.forEach(st => st.classList.remove('export-hidden'));
+                
+                Object.values(charts).forEach(c => c.resize());
+            }
+        }
+
+        async function exportAll() {
+            const ids = ['card-etho', 'card-race', 'card-budget', 'card-correlation'];
+            for (const id of ids) {
+                await exportPNG(id);
+            }
+        }
+
+        document.getElementById('raceSelector').onchange = function() {
+            const vals = raceProfiles[this.value];
+            raceData.individu = [...vals];
+            charts.race.data.datasets[0].data = [...vals];
+            charts.race.update();
+            vals.forEach((v, i) => {
+                const s = document.getElementById(`raceControls-s-${i}`);
+                if(s) s.value = v;
+            });
+            updateCorrelation();
+        };
+
+        createSliders('raceControls', raceData.labels, raceData.individu, charts.race);
+        createSliders('budgetControls', budgetData.labels, budgetData.values, charts.budget);
+        updateCorrelation();
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    </script>
+</body>
+</html>
