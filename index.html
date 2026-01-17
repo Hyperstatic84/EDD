@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EthoDogData - Bilan de Comportement Interactif</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#3730a3">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
+    
+    <!-- Lien vers le fichier manifeste externe -->
+    <link rel="manifest" href="manifest.json">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -90,10 +100,6 @@
         .main-export-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
-        }
-
-        .main-export-btn:active {
-            transform: translateY(0);
         }
 
         select {
@@ -216,7 +222,7 @@
                     <option value="clt">Loup Tchèque</option>
                     <option value="malinois">Malinois</option>
                     <option value="shiba">Shiba Inu</option>
-                    <option value="staff">Staff</option>
+                    <option value="staff">Staff (Amstaff)</option>
                 </select>
             </div>
             <div class="chart-container">
@@ -261,7 +267,6 @@
             </div>
         </section>
 
-        <!-- Nouveau Bouton Global -->
         <div class="pt-6 flex justify-center">
             <button class="main-export-btn w-full" onclick="exportAll()">
                 Tout exporter (4 PNG)
@@ -269,11 +274,20 @@
         </div>
 
         <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8">
-           © Thomas Le Blanc • EthoDogData • <span id="currentDate"></span>
+            EthoDogData • <span id="currentDate"></span>
         </footer>
     </div>
 
     <script>
+        // Enregistrement du Service Worker externe
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then(registration => console.log('SW enregistré'))
+                .catch(err => console.log('SW non enregistré', err));
+            });
+        }
+
         const raceProfiles = {
             custom: [5, 5, 5, 5, 5, 5], beagle: [8, 8, 2, 4, 7, 9], gsd: [6, 7, 9, 8, 8, 7], australian: [8, 5, 4, 8, 9, 9],
             border: [9, 4, 3, 9, 10, 8], ckc: [2, 4, 1, 6, 4, 9], dogo: [8, 3, 9, 5, 8, 4], golden: [4, 3, 4, 9, 6, 10],
@@ -363,10 +377,12 @@
             const securityScoreInd = ethoData.values[3];
 
             charts.correlation.data.datasets[0].data = [ethoScore, raceScoreInd, dailyScoreInd, arousalScoreInd, calmingScoreInd, securityScoreInd];
+            const raceAvg = raceScoreInd;
+            charts.correlation.data.datasets[1].data = [8, raceAvg, Math.min(10, raceAvg + 1), Math.min(10, (ind[0]+ind[4])/2 + 1), 7, 8];
             charts.correlation.update('none');
 
             const badge = document.getElementById('coherenceBadge');
-            const isUnstable = (bud[0] < 5) || (raceScoreInd > dailyScoreInd + 3);
+            const isUnstable = (bud[0] < 5) || (Math.abs(raceScoreInd - dailyScoreInd) > 3);
             badge.innerText = isUnstable ? "Fragile" : "Optimale";
             badge.style.backgroundColor = isUnstable ? "#f59e0b" : "#10b981";
         }
@@ -395,12 +411,8 @@
         async function exportPNG(cardId) {
             const card = document.getElementById(cardId);
             const baseName = card.getAttribute('data-filename') || 'Export';
-            
             const now = new Date();
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = now.getFullYear();
-            const dateStr = `${day}-${month}-${year}`;
+            const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
 
             const btn = card.querySelector('.export-btn');
             const controlsArea = card.querySelectorAll('.controls-area');
@@ -416,12 +428,7 @@
             Object.values(charts).forEach(c => c.resize());
 
             try {
-                const canvas = await html2canvas(card, {
-                    backgroundColor: '#1e1b4b',
-                    scale: 3, 
-                    useCORS: true,
-                    logging: false
-                });
+                const canvas = await html2canvas(card, { backgroundColor: '#1e1b4b', scale: 3, useCORS: true });
                 const link = document.createElement('a');
                 link.download = `EthoDog_${baseName}_${dateStr}.png`;
                 link.href = canvas.toDataURL("image/png");
@@ -432,16 +439,13 @@
                 controlsArea.forEach(c => c.classList.remove('export-hidden'));
                 selectors.forEach(s => s.classList.remove('export-hidden'));
                 statsArea.forEach(st => st.classList.remove('export-hidden'));
-                
                 Object.values(charts).forEach(c => c.resize());
             }
         }
 
         async function exportAll() {
             const ids = ['card-etho', 'card-race', 'card-budget', 'card-correlation'];
-            for (const id of ids) {
-                await exportPNG(id);
-            }
+            for (const id of ids) await exportPNG(id);
         }
 
         document.getElementById('raceSelector').onchange = function() {
