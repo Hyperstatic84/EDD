@@ -2,27 +2,13 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EthoDogData - Bilan de Comportement Interactif</title>
-    
-    <!-- PWA & Mobile Meta Tags -->
-    <meta name="theme-color" content="#3730a3">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="EthoDogData">
-    
-    <!-- App Icon (SVG Data URI) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233730a3%22/><text y=%22.9em%22 font-size=%2260%22 x=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22>EDD</text></svg>">
-
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJpZCI6ICJjb20uZXRob2RvZ2RhdGEuYXBwIiwKICAibmFtZSI6ICJFdGhvRG9nRGF0YSIsCiAgInNob3J0X25hbWUiOiAiRXRob0RvZyIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDIwNjE3IiwKICAidGhlbWVfY29sb3ciOiAiIzM3MzBhMyIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInPjxyZWN0IHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyByeD0nMTAnIGZpbGw9JyMzNzMwYTMnLz48dGV4dCB5PScuOWVtJyBmb250LXNpemU9JzMwMCcgeD0nNTAlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtd2VpZ2h0PSdib2xkJz5FR0Q8L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
@@ -32,12 +18,7 @@
             background-attachment: fixed;
             min-height: 100vh;
             color: #f8fafc;
-            transition: background 0.3s ease;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
         }
-
-        body.print-mode { background: #ffffff !important; color: #000000 !important; }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
@@ -46,26 +27,22 @@
             border-radius: 24px;
             border: 2px solid rgba(99, 102, 241, 0.3);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
         }
 
-        body.print-mode .glass-card {
-            background: #ffffff !important;
-            border: 2px solid #000000 !important;
-            box-shadow: none !important;
-            color: #000000 !important;
-            backdrop-filter: none !important;
+        .force-square {
+            aspect-ratio: 1 / 1 !important;
         }
-
-        .reference-square { aspect-ratio: 1 / 1; }
-        .force-square { aspect-ratio: 1 / 1 !important; }
 
         .chart-container {
             position: relative;
             margin: auto;
             width: 100%;
             height: 336px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -80,98 +57,87 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.5rem;
+            flex-shrink: 0;
         }
 
-        body.print-mode .section-title { color: #000000 !important; }
-
-        .export-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #a5b4fc;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.6rem;
+        .action-btn-bottom {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #c7d2fe;
+            padding: 12px;
+            border-radius: 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .main-export-btn {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
             letter-spacing: 0.05em;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .bw-export-btn {
-            background: #f8fafc;
-            color: #1e1b4b;
-            border: 2px solid #1e1b4b;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
+        .action-btn-bottom:hover {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-1px);
         }
 
-        select, .text-input {
+        select {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 12px 14px;
-            border-radius: 12px;
+            padding: 6px 10px;
+            border-radius: 10px;
             width: 100%;
             outline: none;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
-        body.print-mode .text-input {
-            background: #ffffff !important;
-            border: 2px solid #000000 !important;
-            color: #000000 !important;
+        select option {
+            background: #1e1b4b;
+            color: white;
         }
-
-        select option { background: #1e1b4b; color: white; }
 
         input[type=range] {
             width: 100%;
-            height: 12px;
+            height: 4px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            border-radius: 5px;
             appearance: none;
             outline: none;
-            margin: 10px 0;
         }
 
         input[type=range]::-webkit-slider-thumb {
             appearance: none;
-            width: 28px;
-            height: 28px;
+            width: 14px;
+            height: 14px;
             background: #fff;
             border-radius: 50%;
             cursor: pointer;
-            border: 4px solid #6366f1;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 2px solid #6366f1;
         }
 
-        .label-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .label-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex-shrink: 0;
+        }
 
-        .control-group { display: flex; flex-direction: column; gap: 4px; }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
         .control-label {
             font-size: 0.65rem;
             font-weight: 600;
             color: #a5b4fc;
             text-transform: uppercase;
+            white-space: nowrap;
         }
-
-        body.print-mode .control-label { color: #444444 !important; }
 
         .analysis-badge {
             padding: 4px 12px;
@@ -181,72 +147,110 @@
             text-transform: uppercase;
         }
 
-        .export-hidden { display: none !important; }
-        .print-text-dark { color: #ffffff; }
-        body.print-mode .print-text-dark { color: #000000 !important; }
-        
-        #install-bar {
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+        }
+
+        .export-hidden {
+            display: none !important;
+        }
+
+        /* Modal Styles */
+        #infoModal {
             display: none;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            background: #4f46e5;
-            color: white;
-            padding: 16px;
-            border-radius: 20px;
-            z-index: 9999;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            align-items: center;
-            justify-content: space-between;
-            border: 2px solid rgba(255,255,255,0.2);
+            z-index: 100;
+        }
+
+        .modal-content {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 10px;
         }
     </style>
 </head>
-<body class="p-4 pb-24">
+<body class="p-4 pb-20">
 
-    <!-- Bannière d'installation PWA -->
-    <div id="install-bar">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-bold text-indigo-700">EDD</div>
-            <span class="text-sm font-bold">Installer l'application ?</span>
-        </div>
-        <button id="install-button" class="bg-white text-indigo-600 px-4 py-2 rounded-xl font-bold text-xs uppercase shadow-lg">Installer</button>
-    </div>
-
-    <header class="mb-8 text-center pt-6">
-        <h1 class="text-3xl font-black print-text-dark tracking-tight">EthoDogData</h1>
-        <div id="header-line" class="h-1 w-16 bg-indigo-500 mx-auto mt-2 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)]"></div>
-    </header>
-
-    <div id="app-container" class="max-w-md mx-auto space-y-6">
-        
-        <!-- Zone Nom du Chien -->
-        <div class="glass-card p-6 border-dashed border-indigo-400/50">
-            <div class="control-group">
-                <label class="control-label mb-2">Sujet de l'étude</label>
-                <input type="text" id="dogName" class="text-input" placeholder="Nom du chien..." maxlength="20">
+    <!-- Modal Méthodologie -->
+    <div id="infoModal" class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="toggleModal()"></div>
+        <div class="glass-card w-full max-w-lg p-8 relative z-10 modal-content animate-in fade-in zoom-in duration-300">
+            <button class="absolute top-4 right-4 text-indigo-300 hover:text-white" onclick="toggleModal()">
+                <i data-lucide="x-circle" class="w-8 h-8"></i>
+            </button>
+            
+            <h2 class="text-2xl font-bold mb-6 text-white border-b border-indigo-500/30 pb-2 flex items-center gap-2">
+                <i data-lucide="book-open" class="text-indigo-400"></i> Méthodologie & Sources
+            </h2>
+            
+            <div class="space-y-6 text-sm leading-relaxed text-indigo-100">
+                <section>
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">1. Éthogramme Canin</h3>
+                    <p>Basé sur les éthogrammes classiques du chien domestique (*Canis familiaris*). Sources : Travaux de <strong>Coppinger</strong> et <strong>Marc Bekoff</strong>. Les presets d'âge adaptent les seuils biologiques (sommeil, exploration).</p>
+                </section>
+                
+                <section>
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">2. Tendances de Race</h3>
+                    <p>Synthèse statistique basée sur les lignées de travail (FCI) et les études <strong>Hart & Hart</strong>. Les scores reflètent les prédispositions génétiques et non des comportements figés.</p>
+                </section>
+                
+                <section>
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">3. Budget Temps</h3>
+                    <p>Chronobiologie canine : Besoins de sommeil (12-15h/jour), temps de mastication (endorphines) et équilibre d'autonomie (Solo).</p>
+                </section>
+                
+                <section>
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">4. Corrélation Globale</h3>
+                    <p>C'est l'intelligence croisée : Elle compare la demande génétique à l'offre réelle. Elle ajuste les tolérances selon l'âge (un chiot ne peut pas physiologiquement gérer le même temps de solitude qu'un adulte).</p>
+                </section>
             </div>
         </div>
+    </div>
 
-        <!-- Sections Radar -->
-        <section class="glass-card p-6 reference-square" id="card-etho" data-filename="Ethogramme_Canin">
+    <header class="mb-8 text-center pt-6 relative">
+        <button onclick="toggleModal()" class="absolute right-0 top-6 p-2 text-indigo-300 hover:text-white transition-colors bg-white/5 rounded-full border border-white/10">
+            <i data-lucide="info" class="w-6 h-6"></i>
+        </button>
+        <h1 class="text-3xl font-black text-white tracking-tight">EthoDogData</h1>
+        <div class="h-1 w-16 bg-indigo-500 mx-auto mt-2 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)]"></div>
+    </header>
+
+    <div class="max-w-md mx-auto space-y-6" id="main-container">
+        
+        <!-- Section 1 : Éthogramme -->
+        <section class="glass-card p-6" id="card-etho" data-filename="1_Ethogramme_Espece">
             <div class="section-title">
                 <span>Éthogramme Canin</span>
-                <button class="export-btn" onclick="exportPNG('card-etho')">PNG</button>
+            </div>
+            <div class="mb-4 controls-area">
+                <label class="control-label mb-1 block">Étape de vie</label>
+                <select id="ethoPresetSelector">
+                    <option value="adult">Adulte (Standard)</option>
+                    <option value="puppy">Chiot (Croissance)</option>
+                    <option value="senior">Sénior (Récupération)</option>
+                </select>
             </div>
             <div class="chart-container">
                 <canvas id="ethoChart"></canvas>
             </div>
-            <div class="mt-auto pt-2">
-                <p class="text-[9px] font-bold text-blue-400 print-text-dark uppercase tracking-widest">Référence fixe de l'espèce</p>
+            <div class="py-2">
+                <p class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">Référence fixe de l'espèce</p>
             </div>
+            <div class="mt-2 label-grid controls-area" id="ethoControls"></div>
         </section>
 
-        <section class="glass-card p-6" id="card-race" data-filename="Tendances_de_Race">
+        <!-- Section 2 : Tendances de Race -->
+        <section class="glass-card p-6" id="card-race" data-filename="2_Tendances_Race">
             <div class="section-title">
                 <span>Tendances de Race</span>
-                <button class="export-btn" onclick="exportPNG('card-race')">PNG</button>
             </div>
             <div class="mb-4 controls-area">
                 <select id="raceSelector">
@@ -271,102 +275,90 @@
                 <canvas id="raceChart"></canvas>
             </div>
             <div class="py-2">
-                <p class="text-[9px] font-bold text-orange-400 print-text-dark uppercase tracking-widest">Profil spécifique de l'individu</p>
+                <p class="text-[9px] font-bold text-orange-300 uppercase tracking-widest">Profil spécifique de l'individu</p>
             </div>
             <div class="mt-2 label-grid controls-area" id="raceControls"></div>
         </section>
 
-        <section class="glass-card p-6" id="card-budget" data-filename="Budget_Temps">
+        <!-- Section 3 : Budget Temps -->
+        <section class="glass-card p-6" id="card-budget" data-filename="3_Budget_Temps">
             <div class="section-title">
                 <span>Budget Temps</span>
-                <button class="export-btn" onclick="exportPNG('card-budget')">PNG</button>
             </div>
             <div class="chart-container">
                 <canvas id="budgetChart"></canvas>
             </div>
             <div class="py-2">
-                <p class="text-[9px] font-bold text-emerald-400 print-text-dark uppercase tracking-widest">Répartition journalière réelle</p>
+                <p class="text-[9px] font-bold text-emerald-300 uppercase tracking-widest">Répartition journalière réelle</p>
             </div>
             <div class="mt-2 label-grid controls-area" id="budgetControls"></div>
         </section>
 
-        <section class="glass-card p-6" id="card-correlation" data-filename="Correlation_Globale">
+        <!-- Section 4 : Corrélation Globale -->
+        <section class="glass-card p-6" id="card-correlation" data-filename="4_Correlation_Globale">
             <div class="section-title">
                 <span>Corrélation Globale</span>
-                <button class="export-btn" onclick="exportPNG('card-correlation')">PNG</button>
             </div>
             <div class="chart-container">
                 <canvas id="correlationSpider"></canvas>
             </div>
             <div class="py-2">
-                <p class="text-[9px] font-bold text-indigo-400 print-text-dark uppercase tracking-widest">Synthèse des 3 piliers</p>
-            </div>
-            <div class="flex justify-between items-center bg-white/5 border border-white/5 p-3 mt-4 rounded-xl" id="coherenceBlock">
-                <span class="text-[10px] font-semibold print-text-dark uppercase">Cohérence</span>
-                <span id="coherenceBadge" class="analysis-badge bg-emerald-500 text-white">Optimale</span>
+                <p class="text-[9px] font-bold text-indigo-300 uppercase tracking-widest">Synthèse multidimensionnelle adaptée à l'âge</p>
             </div>
         </section>
+    </div>
 
-        <div class="pt-6 flex flex-col gap-3">
-            <button class="main-export-btn w-full" onclick="exportAll()">
-                Tout exporter (4 fichiers)
+    <!-- Section Boutons d'Export en bas de page -->
+    <div class="max-w-md mx-auto mt-12 mb-8 space-y-3 px-2 export-hidden-zone">
+        <h3 class="text-xs font-bold text-indigo-300/60 uppercase tracking-[0.2em] mb-4 text-center">Téléchargements individuels</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-etho')">
+                <i data-lucide="image" class="w-4 h-4"></i> Éthogramme
             </button>
-            <button class="bw-export-btn w-full flex items-center justify-center gap-2" onclick="exportFullSummaryBW()">
-                Rapport Complet (Vertical N&B)
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-race')">
+                <i data-lucide="image" class="w-4 h-4"></i> Race
+            </button>
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-budget')">
+                <i data-lucide="image" class="w-4 h-4"></i> Budget
+            </button>
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-correlation')">
+                <i data-lucide="image" class="w-4 h-4"></i> Corrélation
             </button>
         </div>
+    </div>
 
-        <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8 print-text-dark">
+    <div class="max-w-md mx-auto px-2">
+        <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8">
             EthoDogData • <span id="currentDate"></span>
         </footer>
     </div>
 
     <script>
-        // --- LOGIQUE SERVICE WORKER (AVEC GESTION D'ERREUR PROTOCOLE) ---
-        if ('serviceWorker' in navigator) {
-            try {
-                const swCode = `
-                    const CACHE_NAME = 'ethodog-v3';
-                    self.addEventListener('install', (e) => {
-                        self.skipWaiting();
-                        e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
-                    });
-                    self.addEventListener('fetch', (e) => {
-                        e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-                    });
-                `;
-                const blob = new Blob([swCode], {type: 'application/javascript'});
-                const swUrl = URL.createObjectURL(blob);
-                
-                // On tente l'enregistrement mais on ne bloque pas l'app si ça échoue (cas des environnements sandboxés)
-                navigator.serviceWorker.register(swUrl).catch(err => {
-                    console.warn("ServiceWorker non supporté dans cet environnement (URL protocol). L'app fonctionnera sans mode hors-ligne.");
-                });
-            } catch (e) {
-                console.warn("Erreur d'initialisation du ServiceWorker.");
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Empêche la notification automatique d'installation PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+        });
+
+        // Modal Function
+        function toggleModal() {
+            const modal = document.getElementById('infoModal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+            } else {
+                modal.style.display = 'flex';
             }
         }
 
-        // --- GESTION INSTALLATION ANDROID ---
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('install-bar').style.display = 'flex';
-        });
+        // --- DATA & PRESETS ---
+        const ethoPresets = {
+            adult: [7, 8, 8, 6, 6, 8],
+            puppy: [6, 10, 9, 8, 4, 10],
+            senior: [8, 5, 6, 9, 7, 4]
+        };
 
-        document.getElementById('install-button').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('install-bar').style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-
-        // --- LOGIQUE DES GRAPHIQUES ---
         const raceProfiles = {
             custom: [5, 5, 5, 5, 5, 5], beagle: [8, 8, 2, 4, 7, 9], gsd: [6, 7, 9, 8, 8, 7], australian: [8, 5, 4, 8, 9, 9],
             border: [9, 4, 3, 9, 10, 8], ckc: [2, 4, 1, 6, 4, 9], dogo: [8, 3, 9, 5, 8, 4], golden: [4, 3, 4, 9, 6, 10],
@@ -374,189 +366,189 @@
             malinois: [9, 8, 8, 9, 10, 7], shiba: [6, 6, 4, 3, 7, 2], staff: [7, 4, 6, 5, 9, 7]
         };
 
-        let isPrintMode = false;
-        const gridDark = 'rgba(255, 255, 255, 0.15)';
-        const gridLight = 'rgba(0, 0, 0, 0.15)';
+        const gridOpacity = 'rgba(255, 255, 255, 0.15)';
 
-        const getRadarOptions = () => ({
+        const getRadarOptions = (labelColor = '#ffffff') => ({
             responsive: true,
             maintainAspectRatio: false,
             layout: { padding: 10 },
             scales: {
                 r: {
-                    min: 0, max: 10, center: true,
+                    min: 0, max: 10,
+                    center: true,
                     ticks: { display: false, stepSize: 2 },
-                    grid: { color: isPrintMode ? gridLight : gridDark },
-                    angleLines: { color: isPrintMode ? gridLight : gridDark },
-                    pointLabels: { 
-                        font: { size: 10, weight: '600' }, 
-                        color: isPrintMode ? '#000000' : '#ffffff',
-                        padding: 8 
-                    }
+                    grid: { color: gridOpacity },
+                    angleLines: { color: gridOpacity },
+                    pointLabels: { font: { size: 10, weight: '600' }, color: labelColor, padding: 8 }
                 }
             },
-            plugins: { legend: { display: false }, tooltip: { enabled: !isPrintMode } }
+            plugins: { legend: { display: false }, tooltip: { enabled: true } }
         });
 
-        const getColors = (color) => {
-            if (isPrintMode) return { bg: 'rgba(0,0,0,0.1)', border: '#000000', point: '#000000' };
-            return { bg: color.replace('1)', '0.35)'), border: color, point: '#ffffff' };
-        };
+        const commonStyle = (color) => ({
+            backgroundColor: color.replace('1)', '0.35)'),
+            borderColor: color,
+            borderWidth: 3,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: color,
+            pointBorderWidth: 1,
+            pointRadius: 4,
+            pointHoverRadius: 6
+        });
 
-        const ethoData = { labels: ['Alimentation', 'Exploration', 'Social', 'Sécurité', 'Hygiène', 'Activité'], values: [7, 9, 8, 6, 5, 8] };
-        const raceData = { labels: ['Prédation', 'Aboiement', 'Garde', 'Docilité', 'Endurance', 'Grégaire'], individu: [5, 5, 5, 5, 5, 5] };
+        // --- CHARTS INITIALIZATION ---
+        const ethoData = { labels: ['Alimentation', 'Exploration', 'Social', 'Sécurité', 'Hygiène', 'Activité'], values: [...ethoPresets.adult] };
+        const raceData = { labels: ['Prédation', 'Aboiement', 'Garde', 'Docilité', 'Endurance', 'Social'], individu: [5, 5, 5, 5, 5, 5] };
         const budgetData = { labels: ['Sommeil', 'Mastication', 'Jeu', 'Balade', 'Contact', 'Solo'], values: [8, 4, 5, 6, 5, 5] };
 
         const charts = {
             etho: new Chart(document.getElementById('ethoChart').getContext('2d'), {
-                type: 'radar', data: { labels: ethoData.labels, datasets: [{ data: ethoData.values }] }, options: getRadarOptions()
+                type: 'radar',
+                data: { labels: ethoData.labels, datasets: [{ data: ethoData.values, ...commonStyle('rgba(59, 130, 246, 1)') }] },
+                options: getRadarOptions()
             }),
             race: new Chart(document.getElementById('raceChart').getContext('2d'), {
-                type: 'radar', data: { labels: raceData.labels, datasets: [{ data: raceData.individu }] }, options: getRadarOptions()
+                type: 'radar',
+                data: { labels: raceData.labels, datasets: [{ data: raceData.individu, ...commonStyle('rgba(249, 115, 22, 1)') }] },
+                options: getRadarOptions()
             }),
             budget: new Chart(document.getElementById('budgetChart').getContext('2d'), {
-                type: 'radar', data: { labels: budgetData.labels, datasets: [{ data: budgetData.values }] }, options: getRadarOptions()
+                type: 'radar',
+                data: { labels: budgetData.labels, datasets: [{ data: budgetData.values, ...commonStyle('rgba(16, 185, 129, 1)') }] },
+                options: getRadarOptions()
             }),
             correlation: new Chart(document.getElementById('correlationSpider').getContext('2d'), {
                 type: 'radar',
                 data: {
-                    labels: ['Espèce', 'Race', 'Quotidien', 'Éveil', 'Apaisement', 'Sécurité'],
+                    labels: ['Satisfaction', 'Équilibre Émo', 'Sécurité/Solo', 'Socialisation', 'Physiologie', 'Stabilité'],
                     datasets: [
-                        { label: 'Individu', data: [0,0,0,0,0,0] },
-                        { label: 'Idéal', data: [8,5,8,6,7,8], borderDash: [5, 5], pointRadius: 0, fill: false }
+                        { label: 'Individu', data: [0,0,0,0,0,0], ...commonStyle('rgba(167, 139, 250, 1)') },
+                        { label: 'Idéal', data: [8,8,8,8,8,8], borderColor: 'rgba(255, 255, 255, 0.4)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, fill: false }
                     ]
                 },
-                options: getRadarOptions()
+                options: getRadarOptions('#ffffff')
             })
         };
 
-        function updateStyles() {
-            const colors = { etho: 'rgba(59, 130, 246, 1)', race: 'rgba(249, 115, 22, 1)', budget: 'rgba(16, 185, 129, 1)', correlation: 'rgba(167, 139, 250, 1)' };
-            Object.keys(charts).forEach(key => {
-                const c = charts[key];
-                const col = getColors(colors[key]);
-                c.options = getRadarOptions();
-                c.data.datasets[0].backgroundColor = col.bg;
-                c.data.datasets[0].borderColor = col.border;
-                c.data.datasets[0].borderWidth = isPrintMode ? 2 : 3;
-                c.data.datasets[0].pointBackgroundColor = col.point;
-                c.data.datasets[0].pointBorderColor = col.border;
-                if (key === 'correlation') c.data.datasets[1].borderColor = isPrintMode ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)';
-                c.update('none');
-            });
-        }
-
+        // --- ALGORITHME DE CORRÉLATION AGE-SENSITIVE ---
         function updateCorrelation() {
+            const age = document.getElementById('ethoPresetSelector').value;
+            const eth = ethoData.values;
             const ind = raceData.individu;
             const bud = budgetData.values;
-            const raceScoreInd = (ind.reduce((a,b) => a+b, 0)) / 6;
-            const dailyScoreInd = (bud.reduce((a,b) => a+b, 0)) / 6;
-            const arousalScoreInd = (ind[0] + ind[4] + bud[2] + bud[3]) / 4; 
-            const calmingScoreInd = (bud[0] + bud[1]) / 2;
-            const securityScoreInd = ethoData.values[3];
 
-            charts.correlation.data.datasets[0].data = [8, raceScoreInd, dailyScoreInd, arousalScoreInd, calmingScoreInd, securityScoreInd];
-            charts.correlation.data.datasets[1].data = [8, raceScoreInd, Math.min(10, raceScoreInd + 1), Math.min(10, (ind[0]+ind[4])/2 + 1), 7, 8];
-            charts.correlation.update('none');
+            // 1. SATISFACTION (Race vs Budget)
+            const raceNeeds = (ind[0] + ind[4]) / 2;
+            const budgetOutlets = (bud[2] + bud[3]) / 2;
+            let satisfactionScore = Math.max(0, 10 - Math.abs(raceNeeds - budgetOutlets));
+            if(age === 'senior' && budgetOutlets > 7) satisfactionScore -= 2;
 
-            const badge = document.getElementById('coherenceBadge');
-            const isUnstable = (bud[0] < 5) || (Math.abs(raceScoreInd - dailyScoreInd) > 3);
-            badge.innerText = isUnstable ? "Fragile" : "Optimale";
-            badge.style.backgroundColor = isUnstable ? "#f59e0b" : "#10b981";
-        }
+            // 2. ÉQUILIBRE ÉMOTIONNEL (Ratio Éveil / Apaisement)
+            const arousal = (ind[0] + ind[2] + bud[2] + bud[3]) / 4;
+            const soothing = (bud[0] + bud[1]) / 2;
+            let emotionalBalance = Math.max(0, 10 - Math.abs(arousal - soothing));
+            if(age === 'puppy' && soothing < 8) emotionalBalance -= 3;
 
-        async function exportPNG(cardId) {
-            const card = document.getElementById(cardId);
-            const dogName = document.getElementById('dogName').value.trim() || 'Inconnu';
-            const baseName = card.getAttribute('data-filename') || 'Export';
-            const toHide = card.querySelectorAll('.export-btn, .controls-area, select');
+            // 3. SÉCURITÉ / SOLO
+            const soloVal = bud[5];
+            let idealSolo = 3;
+            if(age === 'puppy') idealSolo = 1;
+            if(age === 'senior') idealSolo = 2;
+            const soloDiff = Math.abs(soloVal - idealSolo);
+            const securityScore = Math.max(0, eth[3] - (soloDiff * 2));
+
+            // 4. SOCIALISATION (Social Espece + Race vs Contact)
+            const socialRequirement = (eth[2] + ind[5]) / 2;
+            const socialScore = Math.max(0, 10 - Math.abs(socialRequirement - bud[4]));
+
+            // 5. PHYSIOLOGIE
+            let physioScore = bud[0];
+            if(age === 'puppy' && bud[0] < 9) physioScore *= 0.7;
+            if(age === 'senior' && bud[0] < 8) physioScore *= 0.8;
+
+            // 6. STABILITÉ
+            const stabilityScore = (satisfactionScore + emotionalBalance + socialScore + securityScore) / 4;
+
+            charts.correlation.data.datasets[0].data = [
+                satisfactionScore, emotionalBalance, securityScore, socialScore, physioScore, stabilityScore
+            ];
             
-            card.classList.add('force-square');
-            toHide.forEach(el => el.classList.add('export-hidden'));
-
-            try {
-                const canvas = await html2canvas(card, { backgroundColor: isPrintMode ? '#ffffff' : '#1e1b4b', scale: 2 });
-                const link = document.createElement('a');
-                const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
-                link.download = `EthoDog_${dogName}_${baseName}_${dateStr}.png`;
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            } finally {
-                card.classList.remove('force-square');
-                toHide.forEach(el => el.classList.remove('export-hidden'));
+            const idealData = [8, 8, 8, 8, 8, 8];
+            if(age === 'puppy') {
+                idealData[1] = 10;
+                idealData[4] = 10;
+                idealData[2] = eth[3];
+            } else if(age === 'senior') {
+                idealData[0] = 6;
+                idealData[1] = 9;
+                idealData[4] = 9;
             }
+            idealData[3] = socialRequirement;
+
+            charts.correlation.data.datasets[1].data = idealData;
+            charts.correlation.update('none');
         }
 
-        async function exportFullSummaryBW() {
-            const dogName = document.getElementById('dogName').value.trim() || 'Inconnu';
-            isPrintMode = true;
-            document.body.classList.add('print-mode');
-            updateStyles();
-
-            const ids = ['card-etho', 'card-race', 'card-budget', 'card-correlation'];
-            const toHide = document.querySelectorAll('.export-btn, .controls-area, .main-export-btn, .bw-export-btn, #coherenceBlock');
-            toHide.forEach(el => el.classList.add('export-hidden'));
-
-            try {
-                const canvases = [];
-                for (const id of ids) {
-                    const el = document.getElementById(id);
-                    canvases.push(await html2canvas(el, { backgroundColor: '#ffffff', scale: 2 }));
-                }
-
-                const final = document.createElement('canvas');
-                const ctx = final.getContext('2d');
-                const pad = 60;
-                let h = 450; canvases.forEach(c => h += c.height + pad);
-                final.width = canvases[0].width + (pad * 2);
-                final.height = h + 100;
-
-                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,final.width,final.height);
-                ctx.fillStyle = '#000000'; ctx.textAlign = 'center';
-                ctx.font = '50px Inter'; ctx.fillText('Bilan de comportement de :', final.width/2, 140);
-                ctx.font = 'bold 85px Inter'; ctx.fillText(dogName, final.width/2, 240);
-                const dateStr = new Date().toLocaleDateString('fr-FR');
-                ctx.font = '40px Inter'; ctx.fillStyle = '#444444'; ctx.fillText('Fait le ' + dateStr, final.width/2, 330);
-
-                let y = 450;
-                canvases.forEach(c => { ctx.drawImage(c, pad, y); y += c.height + pad; });
-                ctx.font = 'italic 30px Inter'; ctx.fillStyle = '#666666'; ctx.fillText('© EthoDogData - Analyse Canine', final.width/2, final.height - 50);
-
-                const link = document.createElement('a');
-                link.download = `EthoDog_Rapport_${dogName}_${dateStr.replace(/\//g, '-')}.png`;
-                link.href = final.toDataURL("image/png");
-                link.click();
-            } finally {
-                isPrintMode = false;
-                document.body.classList.remove('print-mode');
-                updateStyles();
-                toHide.forEach(el => el.classList.remove('export-hidden'));
-            }
-        }
-
-        async function exportAll() {
-            const ids = ['card-etho', 'card-race', 'card-budget', 'card-correlation'];
-            for (const id of ids) await exportPNG(id);
-        }
-
+        // --- UTILS & HANDLERS ---
         function createSliders(containerId, labels, initialValues, chartInstance, datasetIndex = 0) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; 
             labels.forEach((label, index) => {
                 const group = document.createElement('div');
                 group.className = 'control-group';
-                group.innerHTML = `<label class="control-label">${label}</label><input type="range" min="0" max="10" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
-                const s = group.querySelector('input');
-                s.oninput = function() {
-                    const v = parseInt(this.value);
-                    chartInstance.data.datasets[datasetIndex].data[index] = v;
-                    if (containerId === 'raceControls') raceData.individu[index] = v;
-                    if (containerId === 'budgetControls') budgetData.values[index] = v;
-                    chartInstance.update('none'); updateCorrelation();
+                group.innerHTML = `<label class="control-label">${label}</label>
+                                   <input type="range" min="0" max="10" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
+                const slider = group.querySelector('input');
+                slider.oninput = function() {
+                    const val = parseInt(this.value);
+                    chartInstance.data.datasets[datasetIndex].data[index] = val;
+                    if (containerId === 'ethoControls') ethoData.values[index] = val;
+                    if (containerId === 'raceControls') raceData.individu[index] = val;
+                    if (containerId === 'budgetControls') budgetData.values[index] = val;
+                    chartInstance.update('none');
+                    updateCorrelation();
                 };
                 container.appendChild(group);
             });
         }
+
+        async function exportSingleCard(cardId) {
+            const card = document.getElementById(cardId);
+            const name = card.getAttribute('data-filename') || 'Bilan';
+            const controlsArea = card.querySelectorAll('.controls-area');
+            const bottomButtons = document.querySelector('.export-hidden-zone');
+            const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
+
+            // Masquage temporaire
+            card.classList.add('force-square');
+            controlsArea.forEach(c => c.classList.add('export-hidden'));
+            if(bottomButtons) bottomButtons.classList.add('export-hidden');
+
+            Object.values(charts).forEach(c => c.resize());
+
+            try {
+                const canvas = await html2canvas(card, { backgroundColor: '#1e1b4b', scale: 3, useCORS: true, logging: false, width: 400, height: 400 });
+                const link = document.createElement('a');
+                link.download = `EthoDog_${name}_${dateStr}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            } finally {
+                // Restauration
+                card.classList.remove('force-square');
+                controlsArea.forEach(c => c.classList.remove('export-hidden'));
+                if(bottomButtons) bottomButtons.classList.remove('export-hidden');
+                Object.values(charts).forEach(c => c.resize());
+            }
+        }
+
+        document.getElementById('ethoPresetSelector').onchange = function() {
+            const vals = ethoPresets[this.value];
+            ethoData.values = [...vals];
+            charts.etho.data.datasets[0].data = [...vals];
+            charts.etho.update();
+            vals.forEach((v, i) => { const s = document.getElementById(`ethoControls-s-${i}`); if(s) s.value = v; });
+            updateCorrelation();
+        };
 
         document.getElementById('raceSelector').onchange = function() {
             const vals = raceProfiles[this.value];
@@ -567,9 +559,10 @@
             updateCorrelation();
         };
 
+        createSliders('ethoControls', ethoData.labels, ethoData.values, charts.etho);
         createSliders('raceControls', raceData.labels, raceData.individu, charts.race);
         createSliders('budgetControls', budgetData.labels, budgetData.values, charts.budget);
-        updateStyles(); updateCorrelation();
+        updateCorrelation();
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     </script>
 </body>
