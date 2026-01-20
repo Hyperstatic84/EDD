@@ -199,6 +199,50 @@
             min-width: 36px;
             text-align: center;
         }
+
+        /* Toggle Styles */
+        .toggle-container {
+            display: flex;
+            position: relative;
+            background-color: rgba(30, 27, 75, 0.6); /* indigo-950/60 */
+            border-radius: 8px;
+            padding: 3px;
+            height: 28px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .toggle-highlight {
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 3px;
+            width: calc((100% - 6px) / 3);
+            background-color: #6366f1; /* Indigo-500 */
+            border-radius: 6px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .toggle-item {
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: #e0e7ff;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        
+        .toggle-item:hover {
+            color: white;
+        }
     </style>
 </head>
 <body class="p-4 pb-20">
@@ -222,7 +266,8 @@
                         <i data-lucide="target" class="w-4 h-4"></i> Intention de l'outil
                     </h3>
                     <p class="italic text-indigo-200">
-                        Cette application a pour objectif d'objectiver l'analyse comportementale en croisant les besoins biologiques de l'espèce, les prédispositions génétiques de la race et le mode de vie réel du chien. Elle constitue un support visuel pédagogique permettant au professionnel d'illustrer ses préconisations et de favoriser la compréhension du propriétaire.
+                        Cette application est un <strong class="underline decoration-indigo-400/60 underline-offset-2">outil professionnel</strong> qui a pour vocation d'objectiver l'analyse comportementale en croisant les <strong class="underline decoration-indigo-400/60 underline-offset-2">besoins biologiques</strong> de l'espèce, les <strong class="underline decoration-indigo-400/60 underline-offset-2">prédispositions génétiques</strong> de la race et le <strong class="underline decoration-indigo-400/60 underline-offset-2">mode de vie réel</strong> du chien. <br><br>
+                        <strong>Note importante :</strong> Ces graphiques ne sont pas la pour établir une "note" mais pour <strong class="underline decoration-indigo-400/60 underline-offset-2">poser un constat</strong> et ainsi mieux <strong class="underline decoration-indigo-400/60 underline-offset-2">visualisé</strong>. En aucun cas cet outil n'a pour vocation de remplacer une observation et une analyse faite par un <strong class="underline decoration-indigo-400/60 underline-offset-2">comportementaliste professionnel</strong>, mais il se veut être une <strong class="underline decoration-indigo-400/60 underline-offset-2">base de discussion</strong> visuelle pour <strong class="underline decoration-indigo-400/60 underline-offset-2">mettre en lumière</strong> d'éventuels <strong class="underline decoration-indigo-400/60 underline-offset-2">points d'inconfort</strong> et ainsi proposer des <strong class="underline decoration-indigo-400/60 underline-offset-2">solutions adaptées</strong>.
                     </p>
                 </section>
 
@@ -233,34 +278,48 @@
                         <div>
                             <h4 class="text-xs font-bold mb-2 text-indigo-400">Éthogramme (Espèce)</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
-                                <div class="info-axis-item"><span class="info-axis-tag">ALI</span><p><strong>Alimentation :</strong> Recherche, ingestion.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">EXP</span><p><strong>Exploration :</strong> Flairage, curiosité.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">SOC</span><p><strong>Social :</strong> Interactions sociales.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">SÉC</span><p><strong>Sécurité :</strong> Apaisement territorial.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">HYG</span><p><strong>Hygiène :</strong> Soins corporels.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">ACT</span><p><strong>Activité :</strong> Motricité globale.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ALIM</span><p><strong>Alimentation :</strong> Recherche, ingestion.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">EXPL</span><p><strong>Exploration :</strong> Flairage, curiosité.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOCI</span><p><strong>Social :</strong> Interactions sociales.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SÉCU</span><p><strong>Sécurité :</strong> Apaisement territorial.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">HYGI</span><p><strong>Hygiène :</strong> Soins corporels.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ACTI</span><p><strong>Activité :</strong> Motricité globale.</p></div>
                             </div>
                         </div>
+
                         <div>
-                            <h4 class="text-xs font-bold mb-2 text-indigo-400">Budget Temps (Heures réelles)</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                                <div class="info-axis-item"><span class="info-axis-tag">SOM</span><p><strong>Sommeil :</strong> Échelle 0-20h (cible ~14h adulte).</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">MAS</span><p><strong>Mastication :</strong> Échelle 0-3h (apaisement).</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">JEU</span><p><strong>Jeu :</strong> Échelle 0-4h (stimulation/ludique).</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">BAL</span><p><strong>Balade :</strong> Échelle 0-6h (cible ~2h).</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">CON</span><p><strong>Contact :</strong> Échelle 0-12h (proximité sociale).</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">SOL</span><p><strong>Solo :</strong> Échelle 0-12h (max conseillé 6-8h).</p></div>
+                            <h4 class="text-xs font-bold mb-2 text-indigo-400">Tendances de Race (Génétique)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
+                                <div class="info-axis-item"><span class="info-axis-tag">PRÉD</span><p><strong>Prédation :</strong> Instinct de poursuite et patron moteur.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ABOI</span><p><strong>Aboiement :</strong> Tendance naturelle à la vocalisation.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">GARD</span><p><strong>Garde :</strong> Réactivité territoriale et protection.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">DOCI</span><p><strong>Docilité :</strong> Focus sur l'humain et coopération.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ENDU</span><p><strong>Endurance :</strong> Résistance et besoin de dépense.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOCI</span><p><strong>Social :</strong> Grégarité spécifique à la race.</p></div>
                             </div>
                         </div>
+
+                        <div>
+                            <h4 class="text-xs font-bold mb-2 text-indigo-400">Budget Temps (Plafonds réalistes)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                                <div class="info-axis-item"><span class="info-axis-tag">SOMM</span><p><strong>Sommeil :</strong> Échelle 0-20h (moyenne 14h).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">MAST</span><p><strong>Mastication :</strong> Échelle 0-3h (apaisement).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">JEUX</span><p><strong>Jeux :</strong> Activités ludiques ou cognitives.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">BALA</span><p><strong>Balade :</strong> Échelle 0-6h (moyenne 2h).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">CONT</span><p><strong>Contact :</strong> Proximité sociale et affection.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOLO</span><p><strong>Solo :</strong> Heures de solitude quotidienne (max 6-8h).</p></div>
+                            </div>
+                        </div>
+
                         <div>
                             <h4 class="text-xs font-bold mb-2 text-indigo-400">Corrélation (Synthèse)</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
-                                <div class="info-axis-item"><span class="info-axis-tag">SAT</span><p><strong>Satisfaction :</strong> Besoins de race vs activités.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">ÉQU</span><p><strong>Équilibre Émo :</strong> Ratio Éveil / Apaisement.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">SÉC</span><p><strong>Sécurité :</strong> Impact du Solo et de l'âge.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">SOC</span><p><strong>Socialisation :</strong> Contact réel vs besoin.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">PHY</span><p><strong>Physiologie :</strong> Qualité du repos.</p></div>
-                                <div class="info-axis-item"><span class="info-axis-tag">STA</span><p><strong>Stabilité :</strong> Adaptation globale.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SATI</span><p><strong>Satisfaction :</strong> Besoins de race vs activités.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ÉQUI</span><p><strong>Équilibre :</strong> Ratio Éveil / Apaisement.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SÉCU</span><p><strong>Sécurité :</strong> Impact du Solo et de l'âge.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOCI</span><p><strong>Socialisation :</strong> Contact réel vs besoin.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">PHYS</span><p><strong>Physiologie :</strong> Qualité du repos.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">STAB</span><p><strong>Stabilité :</strong> Adaptation globale.</p></div>
                             </div>
                         </div>
                     </div>
@@ -269,10 +328,10 @@
                 <section>
                     <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-3 pb-1 border-b border-white/10">Sources & Références</h3>
                     <div class="space-y-4">
-                        <div><p class="font-bold text-indigo-200">1. Éthogramme Canin</p><p class="text-xs opacity-90">Basé sur les éthogrammes classiques du chien domestique (*Canis familiaris*). Sources : Travaux de <strong>Coppinger</strong> et <strong>Marc Bekoff</strong>. Les presets d'âge adaptent les seuils biologiques (sommeil, exploration).</p></div>
-                        <div><p class="font-bold text-indigo-200">2. Tendances de Race</p><p class="text-xs opacity-90">Synthèse statistique basée sur les lignées de travail (FCI) et les études <strong>Hart & Hart</strong>. Les scores reflètent les prédispositions génétiques et non des comportements figés.</p></div>
-                        <div><p class="font-bold text-indigo-200">3. Budget Temps</p><p class="text-xs opacity-90">Chronobiologie canine : Besoins de sommeil (12-15h/jour), temps de mastication (endorphines) et équilibre d'autonomie (Solo).</p></div>
-                        <div><p class="font-bold text-indigo-200">4. Corrélation Globale</p><p class="text-xs opacity-90">C'est l'intelligence croisée : Elle compare la demande génétique à l'offre réelle. Elle ajuste les tolérances selon l'âge (un chiot ne peut pas physiologiquement gérer le même temps de solitude qu'un adulte).</p></div>
+                        <div><p class="font-bold text-indigo-200">Éthogramme Canin</p><p class="text-xs opacity-90">Basé sur les éthogrammes classiques du chien domestique (*Canis familiaris*). Sources : Travaux de <strong>Coppinger</strong> et <strong>Marc Bekoff</strong>. Les presets d'âge adaptent les seuils biologiques (sommeil, exploration).</p></div>
+                        <div><p class="font-bold text-indigo-200">Tendances de Race</p><p class="text-xs opacity-90">Synthèse statistique basée sur les lignées de travail (FCI) et les études <strong>Hart & Hart</strong>. Les scores reflètent les prédispositions génétiques et non des comportements figés.</p></div>
+                        <div><p class="font-bold text-indigo-200">Budget Temps</p><p class="text-xs opacity-90">Chronobiologie canine : Besoins de sommeil (12-15h/jour), temps de mastication (endorphines) et équilibre d'autonomie (Solo).</p></div>
+                        <div><p class="font-bold text-indigo-200">Corrélation Globale</p><p class="text-xs opacity-90">C'est l'intelligence croisée : Elle compare la demande génétique à l'offre réelle. Elle ajuste les tolérances selon l'âge (un chiot ne peut pas physiologiquement gérer le même temps de solitude qu'un adulte).</p></div>
                     </div>
                 </section>
             </div>
@@ -284,7 +343,7 @@
             <i data-lucide="info" class="w-6 h-6"></i>
         </button>
         <h1 class="text-3xl font-black text-white tracking-tight">EthoDogData</h1>
-        <p class="text-[10px] text-indigo-300/80 uppercase tracking-[0.15em] font-semibold mt-1">outil comportemental</p>
+        <p class="text-[10px] text-indigo-300/80 uppercase tracking-[0.15em] font-semibold mt-1">outil comportemental pour les professionnels</p>
         <div class="h-1 w-16 bg-indigo-500 mx-auto mt-3 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)]"></div>
     </header>
 
@@ -302,7 +361,7 @@
                 </select>
             </div>
             <div class="chart-container"><canvas id="ethoChart"></canvas></div>
-            <div class="py-2 text-center text-[9px] font-bold text-blue-300 uppercase tracking-widest">cadre de référence de l'espèce</div>
+            <div class="py-2 text-center text-[9px] font-bold text-blue-300 uppercase tracking-widest text-center">cadre de référence de l'espèce</div>
             <div class="mt-2 label-grid controls-area" id="ethoControls"></div>
         </section>
 
@@ -329,15 +388,15 @@
                 </select>
             </div>
             <div class="chart-container"><canvas id="raceChart"></canvas></div>
-            <div class="py-2 text-center text-[9px] font-bold text-orange-300 uppercase tracking-widest">Profil spécifique de l'individu</div>
+            <div class="py-2 text-center text-[9px] font-bold text-orange-300 uppercase tracking-widest">Cadre de référence de la race</div>
             <div class="mt-2 label-grid controls-area" id="raceControls"></div>
         </section>
 
-        <!-- Section 3 : Budget Temps -->
+        <!-- Section 3 : Budget Temps (Échelle 24h) -->
         <section class="glass-card p-6" id="card-budget" data-filename="3_Budget_Temps">
             <div class="section-title"><span>Budget Temps</span></div>
             <div class="chart-container"><canvas id="budgetChart"></canvas></div>
-            <div class="py-2 text-center text-emerald-300 text-[9px] font-bold uppercase tracking-widest">Répartition journalière (Heures/20h max)</div>
+            <div class="py-2 text-center text-emerald-300 text-[9px] font-bold uppercase tracking-widest">Cadre de référence de l'individu</div>
             <div class="mt-2 label-grid controls-area" id="budgetControls"></div>
         </section>
 
@@ -345,12 +404,12 @@
         <section class="glass-card p-6" id="card-correlation" data-filename="4_Correlation_Globale">
             <div class="section-title"><span>Corrélation Globale</span></div>
             <div class="chart-container"><canvas id="correlationSpider"></canvas></div>
-            <div class="py-2 text-center text-indigo-300 text-[9px] font-bold uppercase tracking-widest text-center">Synthèse multidimensionnelle adaptée à l'âge</div>
+            <div class="py-2 text-center text-indigo-300 text-[9px] font-bold uppercase tracking-widest text-center">Synthèse pour interprétation</div>
             <div class="mt-4 label-grid" id="correlationLegend"></div>
         </section>
     </div>
 
-    <!-- Section Boutons d'Export -->
+    <!-- Section Boutons d'Export en bas de page -->
     <div class="max-w-md mx-auto mt-12 mb-8 space-y-3 px-2 export-hidden-zone">
         <h3 class="text-xs font-bold text-indigo-300/60 uppercase tracking-[0.2em] mb-4 text-center">Téléchargements individuels</h3>
         <div class="grid grid-cols-2 gap-3">
@@ -361,9 +420,11 @@
         </div>
     </div>
 
-    <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8 pb-12">
-        EthoDogData • <span id="currentDate"></span>
-    </footer>
+    <div class="max-w-md mx-auto px-2">
+        <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8 pb-12">
+            EthoDogData • <span id="currentDate"></span>
+        </footer>
+    </div>
 
     <script>
         lucide.createIcons();
@@ -383,13 +444,27 @@
             malinois: [9, 8, 8, 9, 10, 7], shiba: [6, 6, 4, 3, 7, 2], staff: [7, 4, 6, 5, 9, 7]
         };
 
-        const budgetMaxes = [20, 3, 4, 6, 12, 12];
+        // Ordre affichage Budget: Sommeil(0), Contact(1), Jeu(2), Solo(3), Balade(4), Mastication(5)
+        const budgetLabels = ['Sommeil', 'Contact', 'Jeu', 'Solo', 'Balade', 'Mastication'];
+        // Max réalistes: Sommeil(20), Contact(12), Jeu(4), Solo(12), Balade(6), Mastication(3)
+        const budgetMaxes = [20, 12, 4, 12, 6, 3];
+
         const ethoLabels = ['Alimentation', 'Exploration', 'Social', 'Sécurité', 'Hygiène', 'Activité'];
         const raceLabels = ['Prédation', 'Aboiement', 'Garde', 'Docilité', 'Endurance', 'Social'];
-        const budgetLabels = ['Sommeil', 'Mastication', 'Jeu', 'Balade', 'Contact', 'Solo'];
-        const correlationLabels = ['Satisfaction', 'Équilibre Émo', 'Sécurité/Solo', 'Socialisation', 'Physiologie', 'Stabilité'];
+        const correlationLabels = ['Satisfaction', 'Équilibre Émo', 'Sécurité', 'Socialisation', 'Physiologie', 'Stabilité'];
 
-        const getShort = (labels) => labels.map(l => l.substring(0, 3).toUpperCase());
+        const budgetQualityOptions = {
+            0: [{ left: "Calme", right: "Agité", id: "sleep_qual" }],
+            1: [{ left: "Humain", right: "Congénère", id: "contact_type" }],
+            2: [{ left: "Solo", right: "Interactif", id: "play_qual" }],
+            3: [{ left: "Zen", right: "Anxieux", id: "solo_qual" }],
+            4: [
+                { left: "Libre", right: "Attaché", id: "walk_type" },
+                { left: "Marche", right: "Renifler", id: "walk_mode" }
+            ]
+        };
+
+        const getShort = (labels) => labels.map(l => l.substring(0, 4).toUpperCase());
         const gridOpacity = 'rgba(255, 255, 255, 0.15)';
         const getRadarOptions = (labelColor = '#ffffff', isShort = true, maxValue = 10) => ({
             responsive: true, maintainAspectRatio: false,
@@ -400,7 +475,7 @@
                     ticks: { display: false, stepSize: maxValue / 5 },
                     grid: { color: gridOpacity },
                     angleLines: { color: gridOpacity },
-                    pointLabels: { font: { size: isShort ? 12 : 10, weight: '700' }, color: labelColor, padding: 10 }
+                    pointLabels: { font: { size: isShort ? 11 : 10, weight: '700' }, color: labelColor, padding: 10 }
                 }
             },
             plugins: { legend: { display: false }, tooltip: { enabled: true } }
@@ -409,14 +484,14 @@
         const commonStyle = (color) => ({
             backgroundColor: color.replace('1)', '0.35)'),
             borderColor: color, borderWidth: 3,
-            pointBackgroundColor: '#ffffff', pointBorderColor: color, pointBorderWidth: 1,
-            pointRadius: 4, pointHoverRadius: 6
+            pointBackgroundColor: '#ffffff', pointBorderColor: color, pointBorderWidth: 1, pointRadius: 4, pointHoverRadius: 6
         });
 
         let currentValues = {
             etho: [...ethoPresets.adult],
             race: [5, 5, 5, 5, 5, 5],
-            budget: [14, 1, 1, 2, 2, 4] 
+            budget: [14, 2, 1, 4, 2, 1],
+            budgetQualities: { sleep_qual: 1, play_qual: 1, walk_type: 1, walk_mode: 1, contact_type: 1, solo_qual: 1 }
         };
 
         const charts = {
@@ -446,7 +521,7 @@
                     labels: getShort(correlationLabels),
                     datasets: [
                         { label: 'Individu', data: [0,0,0,0,0,0], ...commonStyle('rgba(199, 210, 254, 1)') },
-                        { label: 'Seuil de bien-être', data: [0,0,0,0,0,0], borderColor: 'rgba(255, 255, 255, 0.4)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, fill: false }
+                        { label: 'Cible Idéale', data: [0,0,0,0,0,0], borderColor: 'rgba(255, 255, 255, 0.4)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, fill: false }
                     ]
                 },
                 options: getRadarOptions('rgba(199, 210, 254, 1)', true, 10)
@@ -457,79 +532,157 @@
             const age = document.getElementById('ethoPresetSelector').value;
             const eth = currentValues.etho;
             const ind = currentValues.race;
-            const bud = currentValues.budget;
+            const budRaw = currentValues.budget;
+            const budNorm = budRaw.map(v => v / 2.4);
 
-            const totalActivity = bud[2] + bud[3];
+            // 1. SATISFACTION
+            let activityQuality = 1;
+            if (currentValues.budgetQualities.walk_type === 0) activityQuality = 1.2; 
+            if (currentValues.budgetQualities.walk_type === 2) activityQuality = 0.8; 
+
+            const totalActivity = budRaw[2] + (budRaw[4] * activityQuality);
             const activityScore = Math.min(10, (totalActivity / 4) * 10);
+            
             const raceNeed = (ind[0] + ind[4]) / 2;
             let satisfactionScore = Math.max(0, 10 - Math.abs(raceNeed - activityScore));
 
+            // 2. ÉQUILIBRE ÉMOTIONNEL
             const arousal = (ind[0] + activityScore) / 2;
-            const soothing = ((bud[0] / 20) * 10 + (bud[1] / 3) * 10) / 2;
+            
+            let soothingBonus = 0;
+            if (currentValues.budgetQualities.walk_mode === 2) soothingBonus = 1.5; 
+            if (currentValues.budgetQualities.walk_mode === 1) soothingBonus = 0.5; 
+
+            const soothing = Math.min(10, (((budRaw[0] / 20) * 10 + (budRaw[5] / 3) * 10) / 2) + soothingBonus);
+            
             let emotionalBalance = Math.max(0, 10 - Math.abs(arousal - soothing));
+            if(currentValues.budgetQualities.sleep_qual === 2) emotionalBalance -= 1.5;
 
+            // 3. SÉCURITÉ
             let soloThreshold = (age === 'puppy') ? 1 : (age === 'senior' ? 4 : 8);
-            const soloExcess = Math.max(0, bud[5] - soloThreshold);
-            const securityScore = Math.max(0, eth[3] - (soloExcess * 1.5));
+            const soloExcess = Math.max(0, budRaw[3] - soloThreshold);
+            let securityScore = Math.max(0, eth[3] - (soloExcess * 1.5));
+            if(currentValues.budgetQualities.solo_qual === 2) securityScore -= 2;
 
+            // 4. SOCIALISATION
             const socNeed = (eth[2] + ind[5]) / 2;
-            const contactScore = (bud[4] / 8) * 10;
-            const socialScore = Math.max(0, 10 - Math.abs(socNeed - contactScore));
+            const contactScore = (budRaw[1] / 8) * 10;
+            let socialScore = Math.max(0, 10 - Math.abs(socNeed - contactScore));
+            if(budRaw[1] > 0 && currentValues.budgetQualities.contact_type >= 1) socialScore = Math.min(10, socialScore + 1);
 
+            // 5. PHYSIOLOGIE
             let sleepTarget = (age === 'puppy') ? 18 : (age === 'senior') ? 16 : 14;
-            let physioScore = Math.min(10, (bud[0] / sleepTarget) * 10);
+            let physioScore = Math.min(10, (budRaw[0] / sleepTarget) * 10);
 
+            // 6. STABILITÉ
             const stabilityScore = (satisfactionScore + emotionalBalance + socialScore + securityScore) / 4;
 
             charts.correlation.data.datasets[0].data = [
                 satisfactionScore, emotionalBalance, securityScore, socialScore, physioScore, stabilityScore
             ];
             
-            let targetPhysio = 10; 
-            let targetSoc = socNeed;
-            let targetSec = eth[3] * 0.8;
-            let targetSat = Math.max(5, raceNeed);
-            let targetBal = 6; 
+            // --- COURBE "CIBLE IDÉALE" ---
+            const idealData = [8, 8, 8, 8, 8, 8];
+            if(age === 'puppy') {
+                idealData[1] = 9;  // Équilibre vital
+                idealData[4] = 10; // Sommeil max
+                idealData[2] = 7;  // Sécurité
+            } else if(age === 'senior') {
+                idealData[0] = 6;  // Moins d'intensité
+                idealData[1] = 9;  // Besoin calme
+                idealData[4] = 9;  // Besoin repos
+            }
+            idealData[3] = socNeed; 
+            idealData[2] = eth[3];
 
-            charts.correlation.data.datasets[1].data = [
-                targetSat, targetBal, targetSec, targetSoc, targetPhysio, (targetSat + targetBal + targetSec + targetSoc) / 4
-            ];
+            charts.correlation.data.datasets[1].data = idealData;
             charts.correlation.update('none');
         }
+
+        // --- CREATION SLIDERS ET TOGGLES ---
+        function updateQuality(qid, value) {
+            currentValues.budgetQualities[qid] = value;
+            const highlight = document.getElementById(`highlight-${qid}`);
+            if(highlight) {
+                highlight.style.transform = `translateX(${value * 100}%)`;
+            }
+            updateCorrelation();
+        }
+        window.updateQuality = updateQuality;
 
         function createSliders(containerId, labels, initialValues, chartInstance, key) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; 
+            
             labels.forEach((label, index) => {
                 const maxValue = (key === 'budget') ? budgetMaxes[index] : 10;
                 const unit = (key === 'budget') ? 'h' : '';
-                const shortLabel = label.substring(0, 3).toUpperCase();
+                const stepValue = 1;
+                const shortLabel = label.substring(0, 4).toUpperCase();
+                
                 const group = document.createElement('div');
                 group.className = 'control-group';
-                group.innerHTML = `<label class="control-label"><span class="flex items-center"><span class="control-short">${shortLabel}</span>${label}</span><span class="value-display" id="${containerId}-val-${index}">${initialValues[index]}${unit}</span></label>
-                    <input type="range" min="0" max="${maxValue}" step="1" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
-                const slider = group.querySelector('input');
-                const valDisplay = group.querySelector('.value-display');
-                slider.oninput = function() {
+                
+                let html = `
+                    <label class="control-label">
+                        <span class="flex items-center"><span class="control-short">${shortLabel}</span>${label}</span>
+                        <span class="value-display" id="${containerId}-val-${index}">${initialValues[index]}${unit}</span>
+                    </label>
+                    <input type="range" min="0" max="${maxValue}" step="${stepValue}" value="${initialValues[index]}" id="${containerId}-s-${index}" data-idx="${index}">
+                `;
+
+                if(key === 'budget' && budgetQualityOptions[index]) {
+                    budgetQualityOptions[index].forEach((opt, i) => {
+                        const currentVal = currentValues.budgetQualities[opt.id] || 1;
+                        const marginClass = i === 0 ? 'mt-4' : 'mt-0.5'; 
+                        html += `
+                        <div class="${marginClass} mb-1">
+                            <div class="relative flex items-center bg-indigo-950/50 rounded-md h-6 w-full border border-white/10 cursor-pointer select-none" id="toggle-${opt.id}">
+                                <div class="absolute top-0.5 bottom-0.5 w-[calc(33.33%-4px)] bg-indigo-500 rounded-sm shadow-md transition-all duration-300 ease-out"
+                                     style="left: 2px; transform: translateX(${currentVal * 100}%);"
+                                     id="highlight-${opt.id}"></div>
+                                <div class="z-10 flex-1 text-center text-[9px] font-bold text-indigo-100 uppercase" onclick="window.updateQuality('${opt.id}', 0)">${opt.left}</div>
+                                <div class="z-10 flex-1 text-center text-[9px] font-bold text-indigo-100 uppercase" onclick="window.updateQuality('${opt.id}', 1)">Mix</div>
+                                <div class="z-10 flex-1 text-center text-[9px] font-bold text-indigo-100 uppercase" onclick="window.updateQuality('${opt.id}', 2)">${opt.right}</div>
+                            </div>
+                        </div>`;
+                    });
+                }
+                
+                group.innerHTML = html;
+                container.appendChild(group);
+
+                const mainSlider = group.querySelector(`#${containerId}-s-${index}`);
+                const valDisplay = group.querySelector(`#${containerId}-val-${index}`);
+                
+                mainSlider.oninput = function() {
                     const val = parseFloat(this.value);
                     currentValues[key][index] = val;
                     valDisplay.innerText = val + unit;
-                    chartInstance.data.datasets[0].data[index] = (key === 'budget') ? (val / budgetMaxes[index]) * 10 : val;
+                    
+                    if (key === 'budget') {
+                        chartInstance.data.datasets[0].data[index] = (val / budgetMaxes[index]) * 10;
+                    } else {
+                        chartInstance.data.datasets[0].data[index] = val;
+                    }
                     chartInstance.update('none');
                     updateCorrelation();
                 };
-                container.appendChild(group);
             });
+        }
+
+        function createBudgetControls() {
+            createSliders('budgetControls', budgetLabels, currentValues.budget, charts.budget, 'budget');
         }
 
         function createStaticLegend(containerId, labels) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             labels.forEach((label) => {
-                const shortLabel = label.substring(0, 3).toUpperCase();
+                const shortLabel = label.substring(0, 4).toUpperCase();
                 const group = document.createElement('div');
-                group.className = 'control-label py-1';
-                group.innerHTML = `<span class="control-short">${shortLabel}</span>${label}`;
+                group.className = 'control-label py-1 !justify-start';
+                group.innerHTML = `<span class="control-short">${shortLabel}</span><span>${label}</span>`;
                 container.appendChild(group);
             });
         }
@@ -540,10 +693,13 @@
             const controlsArea = card.querySelectorAll('.controls-area');
             const bottomButtons = document.querySelector('.export-hidden-zone');
             const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
+
             card.classList.add('force-square');
             controlsArea.forEach(c => c.classList.add('export-hidden'));
             if(bottomButtons) bottomButtons.classList.add('export-hidden');
+
             Object.values(charts).forEach(c => c.resize());
+
             try {
                 const canvas = await html2canvas(card, { backgroundColor: '#1e1b4b', scale: 3, useCORS: true, logging: false, width: 400, height: 400 });
                 const link = document.createElement('a');
@@ -564,8 +720,7 @@
             charts.etho.data.datasets[0].data = vals;
             charts.etho.update();
             vals.forEach((v, i) => { 
-                const s = document.getElementById(`ethoControls-s-${i}`); if(s) s.value = v; 
-                const d = document.getElementById(`ethoControls-val-${i}`); if(d) d.innerText = v;
+                const s = document.getElementById(`ethoControls-s-${i}`); if(s) { s.value = v; document.getElementById(`ethoControls-val-${i}`).innerText = v; }
             });
             updateCorrelation();
         };
@@ -576,15 +731,14 @@
             charts.race.data.datasets[0].data = vals;
             charts.race.update();
             vals.forEach((v, i) => { 
-                const s = document.getElementById(`raceControls-s-${i}`); if(s) s.value = v; 
-                const d = document.getElementById(`raceControls-val-${i}`); if(d) d.innerText = v;
+                const s = document.getElementById(`raceControls-s-${i}`); if(s) { s.value = v; document.getElementById(`raceControls-val-${i}`).innerText = v; }
             });
             updateCorrelation();
         };
 
         createSliders('ethoControls', ethoLabels, currentValues.etho, charts.etho, 'etho');
         createSliders('raceControls', raceLabels, currentValues.race, charts.race, 'race');
-        createSliders('budgetControls', budgetLabels, currentValues.budget, charts.budget, 'budget');
+        createBudgetControls(); 
         createStaticLegend('correlationLegend', correlationLabels);
         updateCorrelation();
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
