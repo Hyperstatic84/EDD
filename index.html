@@ -137,16 +137,29 @@
             color: #a5b4fc;
             text-transform: uppercase;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .highlight-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
+        .control-short {
+            color: #ffffff;
+            background: rgba(99, 102, 241, 0.5);
+            padding: 1px 4px;
+            border-radius: 4px;
+            margin-right: 6px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            min-width: 32px;
+            text-align: center;
         }
 
-        .export-hidden {
-            display: none !important;
+        .value-display {
+            font-family: monospace;
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 0.75rem;
+            opacity: 0.8;
         }
 
         /* Modal Styles */
@@ -156,7 +169,7 @@
         }
 
         .modal-content {
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
 
@@ -167,41 +180,100 @@
             background: rgba(99, 102, 241, 0.5);
             border-radius: 10px;
         }
+
+        .info-axis-item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .info-axis-tag {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 0.65rem;
+            margin-top: 2px;
+            min-width: 36px;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="p-4 pb-20">
 
-    <!-- Modal Méthodologie -->
+    <!-- Modal Méthodologie & Détails Axes -->
     <div id="infoModal" class="fixed inset-0 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="toggleModal()"></div>
-        <div class="glass-card w-full max-w-lg p-8 relative z-10 modal-content animate-in fade-in zoom-in duration-300">
+        <div class="glass-card w-full max-w-2xl p-6 relative z-10 modal-content animate-in fade-in zoom-in duration-300">
             <button class="absolute top-4 right-4 text-indigo-300 hover:text-white" onclick="toggleModal()">
                 <i data-lucide="x-circle" class="w-8 h-8"></i>
             </button>
             
             <h2 class="text-2xl font-bold mb-6 text-white border-b border-indigo-500/30 pb-2 flex items-center gap-2">
-                <i data-lucide="book-open" class="text-indigo-400"></i> Méthodologie & Sources
+                <i data-lucide="book-open" class="text-indigo-400"></i> Méthodologie & Détail des Axes
             </h2>
             
-            <div class="space-y-6 text-sm leading-relaxed text-indigo-100">
-                <section>
-                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">1. Éthogramme Canin</h3>
-                    <p>Basé sur les éthogrammes classiques du chien domestique (*Canis familiaris*). Sources : Travaux de <strong>Coppinger</strong> et <strong>Marc Bekoff</strong>. Les presets d'âge adaptent les seuils biologiques (sommeil, exploration).</p>
+            <div class="space-y-8 text-sm leading-relaxed text-indigo-100">
+                <!-- Intention -->
+                <section class="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <i data-lucide="target" class="w-4 h-4"></i> Intention de l'outil
+                    </h3>
+                    <p class="italic text-indigo-200">
+                        Cette application a pour objectif d'objectiver l'analyse comportementale en croisant les besoins biologiques de l'espèce, les prédispositions génétiques de la race et le mode de vie réel du chien. Elle constitue un support visuel pédagogique permettant au professionnel d'illustrer ses préconisations et de favoriser la compréhension du propriétaire.
+                    </p>
                 </section>
-                
+
+                <!-- Détail Axes -->
                 <section>
-                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">2. Tendances de Race</h3>
-                    <p>Synthèse statistique basée sur les lignées de travail (FCI) et les études <strong>Hart & Hart</strong>. Les scores reflètent les prédispositions génétiques et non des comportements figés.</p>
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-3 pb-1 border-b border-white/10 italic">Aides à l'interprétation</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-xs font-bold mb-2 text-indigo-400">Éthogramme (Espèce)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
+                                <div class="info-axis-item"><span class="info-axis-tag">ALI</span><p><strong>Alimentation :</strong> Recherche, ingestion.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">EXP</span><p><strong>Exploration :</strong> Flairage, curiosité.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOC</span><p><strong>Social :</strong> Interactions sociales.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SÉC</span><p><strong>Sécurité :</strong> Apaisement territorial.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">HYG</span><p><strong>Hygiène :</strong> Soins corporels.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ACT</span><p><strong>Activité :</strong> Motricité globale.</p></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold mb-2 text-indigo-400">Budget Temps (Heures réelles)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                                <div class="info-axis-item"><span class="info-axis-tag">SOM</span><p><strong>Sommeil :</strong> Échelle 0-20h (cible ~14h adulte).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">MAS</span><p><strong>Mastication :</strong> Échelle 0-3h (apaisement).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">JEU</span><p><strong>Jeu :</strong> Échelle 0-4h (stimulation/ludique).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">BAL</span><p><strong>Balade :</strong> Échelle 0-6h (cible ~2h).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">CON</span><p><strong>Contact :</strong> Échelle 0-12h (proximité sociale).</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOL</span><p><strong>Solo :</strong> Échelle 0-12h (max conseillé 6-8h).</p></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold mb-2 text-indigo-400">Corrélation (Synthèse)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1">
+                                <div class="info-axis-item"><span class="info-axis-tag">SAT</span><p><strong>Satisfaction :</strong> Besoins de race vs activités.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">ÉQU</span><p><strong>Équilibre Émo :</strong> Ratio Éveil / Apaisement.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SÉC</span><p><strong>Sécurité :</strong> Impact du Solo et de l'âge.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">SOC</span><p><strong>Socialisation :</strong> Contact réel vs besoin.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">PHY</span><p><strong>Physiologie :</strong> Qualité du repos.</p></div>
+                                <div class="info-axis-item"><span class="info-axis-tag">STA</span><p><strong>Stabilité :</strong> Adaptation globale.</p></div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
-                
+
                 <section>
-                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">3. Budget Temps</h3>
-                    <p>Chronobiologie canine : Besoins de sommeil (12-15h/jour), temps de mastication (endorphines) et équilibre d'autonomie (Solo).</p>
-                </section>
-                
-                <section>
-                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-2">4. Corrélation Globale</h3>
-                    <p>C'est l'intelligence croisée : Elle compare la demande génétique à l'offre réelle. Elle ajuste les tolérances selon l'âge (un chiot ne peut pas physiologiquement gérer le même temps de solitude qu'un adulte).</p>
+                    <h3 class="text-indigo-300 font-bold uppercase tracking-wider mb-3 pb-1 border-b border-white/10">Sources & Références</h3>
+                    <div class="space-y-4">
+                        <div><p class="font-bold text-indigo-200">1. Éthogramme Canin</p><p class="text-xs opacity-90">Basé sur les éthogrammes classiques du chien domestique (*Canis familiaris*). Sources : Travaux de <strong>Coppinger</strong> et <strong>Marc Bekoff</strong>. Les presets d'âge adaptent les seuils biologiques (sommeil, exploration).</p></div>
+                        <div><p class="font-bold text-indigo-200">2. Tendances de Race</p><p class="text-xs opacity-90">Synthèse statistique basée sur les lignées de travail (FCI) et les études <strong>Hart & Hart</strong>. Les scores reflètent les prédispositions génétiques et non des comportements figés.</p></div>
+                        <div><p class="font-bold text-indigo-200">3. Budget Temps</p><p class="text-xs opacity-90">Chronobiologie canine : Besoins de sommeil (12-15h/jour), temps de mastication (endorphines) et équilibre d'autonomie (Solo).</p></div>
+                        <div><p class="font-bold text-indigo-200">4. Corrélation Globale</p><p class="text-xs opacity-90">C'est l'intelligence croisée : Elle compare la demande génétique à l'offre réelle. Elle ajuste les tolérances selon l'âge (un chiot ne peut pas physiologiquement gérer le même temps de solitude qu'un adulte).</p></div>
+                    </div>
                 </section>
             </div>
         </div>
@@ -212,7 +284,7 @@
             <i data-lucide="info" class="w-6 h-6"></i>
         </button>
         <h1 class="text-3xl font-black text-white tracking-tight">EthoDogData</h1>
-        <p class="text-[10px] text-indigo-300/80 uppercase tracking-[0.15em] font-semibold mt-1">Bilan comportemental pour les professionnels</p>
+        <p class="text-[10px] text-indigo-300/80 uppercase tracking-[0.15em] font-semibold mt-1">outil comportemental</p>
         <div class="h-1 w-16 bg-indigo-500 mx-auto mt-3 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)]"></div>
     </header>
 
@@ -220,31 +292,23 @@
         
         <!-- Section 1 : Éthogramme -->
         <section class="glass-card p-6" id="card-etho" data-filename="1_Ethogramme_Espece">
-            <div class="section-title">
-                <span>Éthogramme Canin</span>
-            </div>
+            <div class="section-title"><span>Éthogramme Canin</span></div>
             <div class="mb-4 controls-area">
-                <label class="control-label mb-1 block">Étape de vie</label>
+                <label class="control-label mb-1 block text-indigo-300">Étape de vie</label>
                 <select id="ethoPresetSelector">
                     <option value="adult">Adulte (Standard)</option>
                     <option value="puppy">Chiot (Croissance)</option>
                     <option value="senior">Sénior (Récupération)</option>
                 </select>
             </div>
-            <div class="chart-container">
-                <canvas id="ethoChart"></canvas>
-            </div>
-            <div class="py-2">
-                <p class="text-[9px] font-bold text-blue-300 uppercase tracking-widest">Référence fixe de l'espèce</p>
-            </div>
+            <div class="chart-container"><canvas id="ethoChart"></canvas></div>
+            <div class="py-2 text-center text-[9px] font-bold text-blue-300 uppercase tracking-widest">cadre de référence de l'espèce</div>
             <div class="mt-2 label-grid controls-area" id="ethoControls"></div>
         </section>
 
         <!-- Section 2 : Tendances de Race -->
         <section class="glass-card p-6" id="card-race" data-filename="2_Tendances_Race">
-            <div class="section-title">
-                <span>Tendances de Race</span>
-            </div>
+            <div class="section-title"><span>Tendances de Race</span></div>
             <div class="mb-4 controls-area">
                 <select id="raceSelector">
                     <option value="custom">Individu / Croisé</option>
@@ -264,94 +328,54 @@
                     <option value="staff">Staff (Amstaff)</option>
                 </select>
             </div>
-            <div class="chart-container">
-                <canvas id="raceChart"></canvas>
-            </div>
-            <div class="py-2">
-                <p class="text-[9px] font-bold text-orange-300 uppercase tracking-widest">Profil spécifique de l'individu</p>
-            </div>
+            <div class="chart-container"><canvas id="raceChart"></canvas></div>
+            <div class="py-2 text-center text-[9px] font-bold text-orange-300 uppercase tracking-widest">Profil spécifique de l'individu</div>
             <div class="mt-2 label-grid controls-area" id="raceControls"></div>
         </section>
 
         <!-- Section 3 : Budget Temps -->
         <section class="glass-card p-6" id="card-budget" data-filename="3_Budget_Temps">
-            <div class="section-title">
-                <span>Budget Temps</span>
-            </div>
-            <div class="chart-container">
-                <canvas id="budgetChart"></canvas>
-            </div>
-            <div class="py-2">
-                <p class="text-[9px] font-bold text-emerald-300 uppercase tracking-widest">Répartition journalière réelle</p>
-            </div>
+            <div class="section-title"><span>Budget Temps</span></div>
+            <div class="chart-container"><canvas id="budgetChart"></canvas></div>
+            <div class="py-2 text-center text-emerald-300 text-[9px] font-bold uppercase tracking-widest">Répartition journalière (Heures/20h max)</div>
             <div class="mt-2 label-grid controls-area" id="budgetControls"></div>
         </section>
 
         <!-- Section 4 : Corrélation Globale -->
         <section class="glass-card p-6" id="card-correlation" data-filename="4_Correlation_Globale">
-            <div class="section-title">
-                <span>Corrélation Globale</span>
-            </div>
-            <div class="chart-container">
-                <canvas id="correlationSpider"></canvas>
-            </div>
-            <div class="py-2">
-                <p class="text-[9px] font-bold text-indigo-300 uppercase tracking-widest">Synthèse multidimensionnelle adaptée à l'âge</p>
-            </div>
+            <div class="section-title"><span>Corrélation Globale</span></div>
+            <div class="chart-container"><canvas id="correlationSpider"></canvas></div>
+            <div class="py-2 text-center text-indigo-300 text-[9px] font-bold uppercase tracking-widest text-center">Synthèse multidimensionnelle adaptée à l'âge</div>
+            <div class="mt-4 label-grid" id="correlationLegend"></div>
         </section>
     </div>
 
-    <!-- Section Boutons d'Export en bas de page -->
+    <!-- Section Boutons d'Export -->
     <div class="max-w-md mx-auto mt-12 mb-8 space-y-3 px-2 export-hidden-zone">
         <h3 class="text-xs font-bold text-indigo-300/60 uppercase tracking-[0.2em] mb-4 text-center">Téléchargements individuels</h3>
         <div class="grid grid-cols-2 gap-3">
-            <button class="action-btn-bottom" onclick="exportSingleCard('card-etho')">
-                <i data-lucide="image" class="w-4 h-4"></i> Éthogramme
-            </button>
-            <button class="action-btn-bottom" onclick="exportSingleCard('card-race')">
-                <i data-lucide="image" class="w-4 h-4"></i> Race
-            </button>
-            <button class="action-btn-bottom" onclick="exportSingleCard('card-budget')">
-                <i data-lucide="image" class="w-4 h-4"></i> Budget
-            </button>
-            <button class="action-btn-bottom" onclick="exportSingleCard('card-correlation')">
-                <i data-lucide="image" class="w-4 h-4"></i> Corrélation
-            </button>
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-etho')"><i data-lucide="image" class="w-4 h-4"></i> Éthogramme</button>
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-race')"><i data-lucide="image" class="w-4 h-4"></i> Race</button>
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-budget')"><i data-lucide="image" class="w-4 h-4"></i> Budget</button>
+            <button class="action-btn-bottom" onclick="exportSingleCard('card-correlation')"><i data-lucide="image" class="w-4 h-4"></i> Corrélation</button>
         </div>
     </div>
 
-    <div class="max-w-md mx-auto px-2">
-        <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8">
-            EthoDogData • <span id="currentDate"></span>
-        </footer>
-    </div>
+    <footer class="text-center text-indigo-300/40 text-[10px] uppercase tracking-[0.2em] pt-8 pb-12">
+        EthoDogData • <span id="currentDate"></span>
+    </footer>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Empêche la notification automatique d'installation PWA
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-        });
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); });
 
-        // Modal Function
         function toggleModal() {
             const modal = document.getElementById('infoModal');
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
-            } else {
-                modal.style.display = 'flex';
-            }
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // --- DATA & PRESETS ---
-        const ethoPresets = {
-            adult: [7, 8, 8, 6, 6, 8],
-            puppy: [6, 10, 9, 8, 4, 10],
-            senior: [8, 5, 6, 9, 7, 4]
-        };
-
+        const ethoPresets = { adult: [7, 8, 8, 6, 6, 8], puppy: [6, 10, 9, 8, 4, 10], senior: [8, 5, 6, 9, 7, 4] };
         const raceProfiles = {
             custom: [5, 5, 5, 5, 5, 5], beagle: [8, 8, 2, 4, 7, 9], gsd: [6, 7, 9, 8, 8, 7], australian: [8, 5, 4, 8, 9, 9],
             border: [9, 4, 3, 9, 10, 8], ckc: [2, 4, 1, 6, 4, 9], dogo: [8, 3, 9, 5, 8, 4], golden: [4, 3, 4, 9, 6, 10],
@@ -359,20 +383,24 @@
             malinois: [9, 8, 8, 9, 10, 7], shiba: [6, 6, 4, 3, 7, 2], staff: [7, 4, 6, 5, 9, 7]
         };
 
-        const gridOpacity = 'rgba(255, 255, 255, 0.15)';
+        const budgetMaxes = [20, 3, 4, 6, 12, 12];
+        const ethoLabels = ['Alimentation', 'Exploration', 'Social', 'Sécurité', 'Hygiène', 'Activité'];
+        const raceLabels = ['Prédation', 'Aboiement', 'Garde', 'Docilité', 'Endurance', 'Social'];
+        const budgetLabels = ['Sommeil', 'Mastication', 'Jeu', 'Balade', 'Contact', 'Solo'];
+        const correlationLabels = ['Satisfaction', 'Équilibre Émo', 'Sécurité/Solo', 'Socialisation', 'Physiologie', 'Stabilité'];
 
-        const getRadarOptions = (labelColor = '#ffffff') => ({
-            responsive: true,
-            maintainAspectRatio: false,
-            layout: { padding: 10 },
+        const getShort = (labels) => labels.map(l => l.substring(0, 3).toUpperCase());
+        const gridOpacity = 'rgba(255, 255, 255, 0.15)';
+        const getRadarOptions = (labelColor = '#ffffff', isShort = true, maxValue = 10) => ({
+            responsive: true, maintainAspectRatio: false,
+            layout: { padding: 15 },
             scales: {
                 r: {
-                    min: 0, max: 10,
-                    center: true,
-                    ticks: { display: false, stepSize: 2 },
+                    min: 0, max: maxValue, center: true,
+                    ticks: { display: false, stepSize: maxValue / 5 },
                     grid: { color: gridOpacity },
                     angleLines: { color: gridOpacity },
-                    pointLabels: { font: { size: 10, weight: '600' }, color: labelColor, padding: 8 }
+                    pointLabels: { font: { size: isShort ? 12 : 10, weight: '700' }, color: labelColor, padding: 10 }
                 }
             },
             plugins: { legend: { display: false }, tooltip: { enabled: true } }
@@ -380,127 +408,128 @@
 
         const commonStyle = (color) => ({
             backgroundColor: color.replace('1)', '0.35)'),
-            borderColor: color,
-            borderWidth: 3,
-            pointBackgroundColor: '#ffffff',
-            pointBorderColor: color,
-            pointBorderWidth: 1,
-            pointRadius: 4,
-            pointHoverRadius: 6
+            borderColor: color, borderWidth: 3,
+            pointBackgroundColor: '#ffffff', pointBorderColor: color, pointBorderWidth: 1,
+            pointRadius: 4, pointHoverRadius: 6
         });
 
-        // --- CHARTS INITIALIZATION ---
-        const ethoData = { labels: ['Alimentation', 'Exploration', 'Social', 'Sécurité', 'Hygiène', 'Activité'], values: [...ethoPresets.adult] };
-        const raceData = { labels: ['Prédation', 'Aboiement', 'Garde', 'Docilité', 'Endurance', 'Social'], individu: [5, 5, 5, 5, 5, 5] };
-        const budgetData = { labels: ['Sommeil', 'Mastication', 'Jeu', 'Balade', 'Contact', 'Solo'], values: [8, 4, 5, 6, 5, 5] };
+        let currentValues = {
+            etho: [...ethoPresets.adult],
+            race: [5, 5, 5, 5, 5, 5],
+            budget: [14, 1, 1, 2, 2, 4] 
+        };
 
         const charts = {
             etho: new Chart(document.getElementById('ethoChart').getContext('2d'), {
                 type: 'radar',
-                data: { labels: ethoData.labels, datasets: [{ data: ethoData.values, ...commonStyle('rgba(59, 130, 246, 1)') }] },
-                options: getRadarOptions()
+                data: { labels: getShort(ethoLabels), datasets: [{ data: [...currentValues.etho], ...commonStyle('rgba(59, 130, 246, 1)') }] },
+                options: getRadarOptions('rgba(147, 197, 253, 1)', true, 10)
             }),
             race: new Chart(document.getElementById('raceChart').getContext('2d'), {
                 type: 'radar',
-                data: { labels: raceData.labels, datasets: [{ data: raceData.individu, ...commonStyle('rgba(249, 115, 22, 1)') }] },
-                options: getRadarOptions()
+                data: { labels: getShort(raceLabels), datasets: [{ data: [...currentValues.race], ...commonStyle('rgba(249, 115, 22, 1)') }] },
+                options: getRadarOptions('rgba(253, 186, 116, 1)', true, 10)
             }),
             budget: new Chart(document.getElementById('budgetChart').getContext('2d'), {
                 type: 'radar',
-                data: { labels: budgetData.labels, datasets: [{ data: budgetData.values, ...commonStyle('rgba(16, 185, 129, 1)') }] },
-                options: getRadarOptions()
+                data: { 
+                    labels: getShort(budgetLabels), 
+                    datasets: [{ 
+                        data: currentValues.budget.map((v, i) => (v / budgetMaxes[i]) * 10), 
+                        ...commonStyle('rgba(16, 185, 129, 1)') 
+                    }] 
+                },
+                options: getRadarOptions('rgba(110, 231, 183, 1)', true, 10)
             }),
             correlation: new Chart(document.getElementById('correlationSpider').getContext('2d'), {
-                type: 'radar',
-                data: {
-                    labels: ['Satisfaction', 'Équilibre Émo', 'Sécurité/Solo', 'Socialisation', 'Physiologie', 'Stabilité'],
+                type: 'radar', data: {
+                    labels: getShort(correlationLabels),
                     datasets: [
-                        { label: 'Individu', data: [0,0,0,0,0,0], ...commonStyle('rgba(167, 139, 250, 1)') },
-                        { label: 'Idéal', data: [8,8,8,8,8,8], borderColor: 'rgba(255, 255, 255, 0.4)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, fill: false }
+                        { label: 'Individu', data: [0,0,0,0,0,0], ...commonStyle('rgba(199, 210, 254, 1)') },
+                        { label: 'Seuil de bien-être', data: [0,0,0,0,0,0], borderColor: 'rgba(255, 255, 255, 0.4)', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, fill: false }
                     ]
                 },
-                options: getRadarOptions('#ffffff')
+                options: getRadarOptions('rgba(199, 210, 254, 1)', true, 10)
             })
         };
 
-        // --- ALGORITHME DE CORRÉLATION AGE-SENSITIVE ---
         function updateCorrelation() {
             const age = document.getElementById('ethoPresetSelector').value;
-            const eth = ethoData.values;
-            const ind = raceData.individu;
-            const bud = budgetData.values;
+            const eth = currentValues.etho;
+            const ind = currentValues.race;
+            const bud = currentValues.budget;
 
-            // 1. SATISFACTION (Race vs Budget)
-            const raceNeeds = (ind[0] + ind[4]) / 2;
-            const budgetOutlets = (bud[2] + bud[3]) / 2;
-            let satisfactionScore = Math.max(0, 10 - Math.abs(raceNeeds - budgetOutlets));
-            if(age === 'senior' && budgetOutlets > 7) satisfactionScore -= 2;
+            const totalActivity = bud[2] + bud[3];
+            const activityScore = Math.min(10, (totalActivity / 4) * 10);
+            const raceNeed = (ind[0] + ind[4]) / 2;
+            let satisfactionScore = Math.max(0, 10 - Math.abs(raceNeed - activityScore));
 
-            // 2. ÉQUILIBRE ÉMOTIONNEL (Ratio Éveil / Apaisement)
-            const arousal = (ind[0] + ind[2] + bud[2] + bud[3]) / 4;
-            const soothing = (bud[0] + bud[1]) / 2;
+            const arousal = (ind[0] + activityScore) / 2;
+            const soothing = ((bud[0] / 20) * 10 + (bud[1] / 3) * 10) / 2;
             let emotionalBalance = Math.max(0, 10 - Math.abs(arousal - soothing));
-            if(age === 'puppy' && soothing < 8) emotionalBalance -= 3;
 
-            // 3. SÉCURITÉ / SOLO
-            const soloVal = bud[5];
-            let idealSolo = 3;
-            if(age === 'puppy') idealSolo = 1;
-            if(age === 'senior') idealSolo = 2;
-            const soloDiff = Math.abs(soloVal - idealSolo);
-            const securityScore = Math.max(0, eth[3] - (soloDiff * 2));
+            let soloThreshold = (age === 'puppy') ? 1 : (age === 'senior' ? 4 : 8);
+            const soloExcess = Math.max(0, bud[5] - soloThreshold);
+            const securityScore = Math.max(0, eth[3] - (soloExcess * 1.5));
 
-            // 4. SOCIALISATION (Social Espece + Race vs Contact)
-            const socialRequirement = (eth[2] + ind[5]) / 2;
-            const socialScore = Math.max(0, 10 - Math.abs(socialRequirement - bud[4]));
+            const socNeed = (eth[2] + ind[5]) / 2;
+            const contactScore = (bud[4] / 8) * 10;
+            const socialScore = Math.max(0, 10 - Math.abs(socNeed - contactScore));
 
-            // 5. PHYSIOLOGIE
-            let physioScore = bud[0];
-            if(age === 'puppy' && bud[0] < 9) physioScore *= 0.7;
-            if(age === 'senior' && bud[0] < 8) physioScore *= 0.8;
+            let sleepTarget = (age === 'puppy') ? 18 : (age === 'senior') ? 16 : 14;
+            let physioScore = Math.min(10, (bud[0] / sleepTarget) * 10);
 
-            // 6. STABILITÉ
             const stabilityScore = (satisfactionScore + emotionalBalance + socialScore + securityScore) / 4;
 
             charts.correlation.data.datasets[0].data = [
                 satisfactionScore, emotionalBalance, securityScore, socialScore, physioScore, stabilityScore
             ];
             
-            const idealData = [8, 8, 8, 8, 8, 8];
-            if(age === 'puppy') {
-                idealData[1] = 10;
-                idealData[4] = 10;
-                idealData[2] = eth[3];
-            } else if(age === 'senior') {
-                idealData[0] = 6;
-                idealData[1] = 9;
-                idealData[4] = 9;
-            }
-            idealData[3] = socialRequirement;
+            let targetPhysio = 10; 
+            let targetSoc = socNeed;
+            let targetSec = eth[3] * 0.8;
+            let targetSat = Math.max(5, raceNeed);
+            let targetBal = 6; 
 
-            charts.correlation.data.datasets[1].data = idealData;
+            charts.correlation.data.datasets[1].data = [
+                targetSat, targetBal, targetSec, targetSoc, targetPhysio, (targetSat + targetBal + targetSec + targetSoc) / 4
+            ];
             charts.correlation.update('none');
         }
 
-        // --- UTILS & HANDLERS ---
-        function createSliders(containerId, labels, initialValues, chartInstance, datasetIndex = 0) {
+        function createSliders(containerId, labels, initialValues, chartInstance, key) {
             const container = document.getElementById(containerId);
             container.innerHTML = ''; 
             labels.forEach((label, index) => {
+                const maxValue = (key === 'budget') ? budgetMaxes[index] : 10;
+                const unit = (key === 'budget') ? 'h' : '';
+                const shortLabel = label.substring(0, 3).toUpperCase();
                 const group = document.createElement('div');
                 group.className = 'control-group';
-                group.innerHTML = `<label class="control-label">${label}</label>
-                                   <input type="range" min="0" max="10" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
+                group.innerHTML = `<label class="control-label"><span class="flex items-center"><span class="control-short">${shortLabel}</span>${label}</span><span class="value-display" id="${containerId}-val-${index}">${initialValues[index]}${unit}</span></label>
+                    <input type="range" min="0" max="${maxValue}" step="1" value="${initialValues[index]}" id="${containerId}-s-${index}">`;
                 const slider = group.querySelector('input');
+                const valDisplay = group.querySelector('.value-display');
                 slider.oninput = function() {
-                    const val = parseInt(this.value);
-                    chartInstance.data.datasets[datasetIndex].data[index] = val;
-                    if (containerId === 'ethoControls') ethoData.values[index] = val;
-                    if (containerId === 'raceControls') raceData.individu[index] = val;
-                    if (containerId === 'budgetControls') budgetData.values[index] = val;
+                    const val = parseFloat(this.value);
+                    currentValues[key][index] = val;
+                    valDisplay.innerText = val + unit;
+                    chartInstance.data.datasets[0].data[index] = (key === 'budget') ? (val / budgetMaxes[index]) * 10 : val;
                     chartInstance.update('none');
                     updateCorrelation();
                 };
+                container.appendChild(group);
+            });
+        }
+
+        function createStaticLegend(containerId, labels) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            labels.forEach((label) => {
+                const shortLabel = label.substring(0, 3).toUpperCase();
+                const group = document.createElement('div');
+                group.className = 'control-label py-1';
+                group.innerHTML = `<span class="control-short">${shortLabel}</span>${label}`;
                 container.appendChild(group);
             });
         }
@@ -511,14 +540,10 @@
             const controlsArea = card.querySelectorAll('.controls-area');
             const bottomButtons = document.querySelector('.export-hidden-zone');
             const dateStr = new Date().toLocaleDateString('fr-FR').replace(/\//g, '-');
-
-            // Masquage temporaire
             card.classList.add('force-square');
             controlsArea.forEach(c => c.classList.add('export-hidden'));
             if(bottomButtons) bottomButtons.classList.add('export-hidden');
-
             Object.values(charts).forEach(c => c.resize());
-
             try {
                 const canvas = await html2canvas(card, { backgroundColor: '#1e1b4b', scale: 3, useCORS: true, logging: false, width: 400, height: 400 });
                 const link = document.createElement('a');
@@ -526,7 +551,6 @@
                 link.href = canvas.toDataURL("image/png");
                 link.click();
             } finally {
-                // Restauration
                 card.classList.remove('force-square');
                 controlsArea.forEach(c => c.classList.remove('export-hidden'));
                 if(bottomButtons) bottomButtons.classList.remove('export-hidden');
@@ -535,26 +559,33 @@
         }
 
         document.getElementById('ethoPresetSelector').onchange = function() {
-            const vals = ethoPresets[this.value];
-            ethoData.values = [...vals];
-            charts.etho.data.datasets[0].data = [...vals];
+            const vals = [...ethoPresets[this.value]];
+            currentValues.etho = vals;
+            charts.etho.data.datasets[0].data = vals;
             charts.etho.update();
-            vals.forEach((v, i) => { const s = document.getElementById(`ethoControls-s-${i}`); if(s) s.value = v; });
+            vals.forEach((v, i) => { 
+                const s = document.getElementById(`ethoControls-s-${i}`); if(s) s.value = v; 
+                const d = document.getElementById(`ethoControls-val-${i}`); if(d) d.innerText = v;
+            });
             updateCorrelation();
         };
 
         document.getElementById('raceSelector').onchange = function() {
-            const vals = raceProfiles[this.value];
-            raceData.individu = [...vals];
-            charts.race.data.datasets[0].data = [...vals];
+            const vals = [...raceProfiles[this.value]];
+            currentValues.race = vals;
+            charts.race.data.datasets[0].data = vals;
             charts.race.update();
-            vals.forEach((v, i) => { const s = document.getElementById(`raceControls-s-${i}`); if(s) s.value = v; });
+            vals.forEach((v, i) => { 
+                const s = document.getElementById(`raceControls-s-${i}`); if(s) s.value = v; 
+                const d = document.getElementById(`raceControls-val-${i}`); if(d) d.innerText = v;
+            });
             updateCorrelation();
         };
 
-        createSliders('ethoControls', ethoData.labels, ethoData.values, charts.etho);
-        createSliders('raceControls', raceData.labels, raceData.individu, charts.race);
-        createSliders('budgetControls', budgetData.labels, budgetData.values, charts.budget);
+        createSliders('ethoControls', ethoLabels, currentValues.etho, charts.etho, 'etho');
+        createSliders('raceControls', raceLabels, currentValues.race, charts.race, 'race');
+        createSliders('budgetControls', budgetLabels, currentValues.budget, charts.budget, 'budget');
+        createStaticLegend('correlationLegend', correlationLabels);
         updateCorrelation();
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     </script>
